@@ -1,14 +1,4 @@
-#include "Vision.h"
-#include "AI.h"
-#include "Voice.h"
-#include "Move.h"
 #include "Game.h"
-
-#include <iostream>
-#include <stdlib.h>
-#include <time.h>
-
-using namespace std;
 
 Game::Game()
 {
@@ -31,69 +21,37 @@ Game::Game()
 }
 
 void Game::printBoard() {
-    cout << "###########################################" << endl;
+    std::cout << "###########################################" << std::endl;
     for(int i=0; i<ROW_COUNT; ++i) {
         for(int j=0; j<COLUMN_COUNT; ++j) {
-            cout << "#  " << rows[i][j] << "  ";
+            std::cout << "#  " << rows[i][j] << "  ";
         }
-        cout << "#" << endl;
-        cout << "###########################################" << endl;
+        std::cout << "#" << std::endl;
+        std::cout << "###########################################" << std::endl;
     }
 }
 
-void Game::takeTurn(Move turn) {
+bool Game::takeTurn(Move turn) {
     int pos = -1;
     if(columns[turn.column][ROW_COUNT-1]==0) {
         pos=ROW_COUNT-1;
-        cout << "MEME" <<endl;
+        std::cout << "MEME" <<std::endl;
     }
     else while(columns[turn.column][pos+1]==0) {
         pos++;
     }
     if(pos==-1) {
-        cout << "Error: Column full";
-        return;
+        std::cout << "Error: Column full";
+        return false;
     }
     columns[turn.column][pos] = turn.player;
     rows[pos][turn.column] = turn.player;
     diagonal_left_down_right[turn.column+(5-pos)][turn.column] = turn.player;
     diagonal_right_down_left[(6-turn.column)+(5-pos)][6-turn.column] = turn.player;
+    return true;
 }
 
 bool Game::isWin() {
     //TODO
     return false;
-}
-
-int main()
-{
-    /*cout << "Welcome! Will you be playing with a webcam? (Y/N) - ";
-    string webcam = "";
-    cin >> webcam;*/
-    //TODO Webcam implementation
-    bool finished = false;
-    Move turn1;
-    Move turn2;
-    Game playTime;
-    playTime.printBoard();
-    while(!finished) {
-        turn1 = Move();
-        turn1.player=1;
-        cout << "Enter red player's move column - ";
-        cin >> turn1.column;
-        --turn1.column;
-        playTime.takeTurn(turn1);
-        playTime.printBoard();
-
-        turn2 = Move();
-        turn2.player=2;
-        cout << "Enter yellow player's move column - ";
-        cin >> turn2.column;
-        --turn2.column;
-        playTime.takeTurn(turn2);
-
-        playTime.printBoard();
-        finished = playTime.isWin();
-    }
-    return 0;
 }

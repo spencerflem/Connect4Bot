@@ -17,7 +17,7 @@ class Game
         //Prints the current board state
         void printBoard();
         //Makes a move and updates board
-        void takeTurn(Move turn);
+        bool takeTurn(Move turn);
         //Checks to see if a player has won the game
         bool isWin();
     private:
