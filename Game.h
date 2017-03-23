@@ -1,6 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include "Move.h"
 #include <iostream>
 #include <string>
 
@@ -8,13 +9,6 @@ const int COLUMN_COUNT = 7;
 const int ROW_COUNT = 6;
 const int DIAGONAL_COUNT = 11;
 const int DIAGONAL_LENGTH = 6;
-struct Play {
-    //Player 1 = Red
-    //Player 2 = Yellow
-    int playerID;
-    int moveColumn;
-    int moveRow;
-};
 
 class Game
 {
@@ -23,7 +17,7 @@ class Game
         //Prints the current board state
         void printBoard();
         //Makes a move and updates board
-        void takeTurn(Play* turn);
+        void takeTurn(Move* turn);
         //Checks to see if a player has won the game
         bool isWin();
     private:
