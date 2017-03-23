@@ -1,6 +1,9 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include <iostream>
+#include <string>
+
 const int COLUMN_COUNT = 7;
 const int ROW_COUNT = 6;
 const int DIAGONAL_COUNT = 11;
