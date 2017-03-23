@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <time.h>
 
+using namespace std;
 
 Game::Game()
 {
@@ -28,6 +29,7 @@ Game::Game()
         }
     }
 }
+
 void Game::printBoard() {
     cout << "###########################################" << endl;
     for(int i=0; i<ROW_COUNT; ++i) {
@@ -38,6 +40,7 @@ void Game::printBoard() {
         cout << "###########################################" << endl;
     }
 }
+
 void Game::takeTurn(Play* turn) {
     int pos = -1;
     if(columns[turn->moveColumn][ROW_COUNT-1]==0) {
