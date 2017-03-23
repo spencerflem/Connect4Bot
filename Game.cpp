@@ -41,28 +41,28 @@ void Game::printBoard() {
     }
 }
 
-void Game::takeTurn(Move* turn) {
+void Game::takeTurn(Move turn) {
     int pos = -1;
-    if(columns[turn->moveColumn][ROW_COUNT-1]==0) {
+    if(columns[turn.column][ROW_COUNT-1]==0) {
         pos=ROW_COUNT-1;
         cout << "MEME" <<endl;
     }
-    else while(columns[turn->moveColumn][pos+1]==0) {
+    else while(columns[turn.column][pos+1]==0) {
         pos++;
     }
     if(pos==-1) {
         cout << "Error: Column full";
         return;
     }
-    columns[turn->moveColumn][pos] = turn->playerID;
-    rows[pos][turn->moveColumn] = turn->playerID;
-    diagonal_left_down_right[turn->moveColumn+(5-pos)][turn->moveColumn] = turn->playerID;
-    diagonal_right_down_left[(6-turn->moveColumn)+(5-pos)][6-turn->moveColumn] = turn->playerID;
+    columns[turn.column][pos] = turn.player;
+    rows[pos][turn.column] = turn.player;
+    diagonal_left_down_right[turn.column+(5-pos)][turn.column] = turn.player;
+    diagonal_right_down_left[(6-turn.column)+(5-pos)][6-turn.column] = turn.player;
 }
 
 bool Game::isWin() {
     //TODO
-    return true;
+    return false;
 }
 
 int main()
@@ -72,23 +72,24 @@ int main()
     cin >> webcam;*/
     //TODO Webcam implementation
     bool finished = false;
+    Move turn1;
+    Move turn2;
     Game playTime;
+    playTime.printBoard();
     while(!finished) {
-        playTime.printBoard();
-
-        Move* turn1 = new Move;
-        turn1->player=1;
+        turn1 = Move();
+        turn1.player=1;
         cout << "Enter red player's move column - ";
-        cin >> turn1->column;
-        --turn1->column;
+        cin >> turn1.column;
+        --turn1.column;
         playTime.takeTurn(turn1);
         playTime.printBoard();
 
-        Move* turn2 = new Move;
-        turn2->player=2;
+        turn2 = Move();
+        turn2.player=2;
         cout << "Enter yellow player's move column - ";
-        cin >> turn2->column;
-        --turn2->column;
+        cin >> turn2.column;
+        --turn2.column;
         playTime.takeTurn(turn2);
 
         playTime.printBoard();
