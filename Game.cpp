@@ -41,7 +41,7 @@ void Game::printBoard() {
     }
 }
 
-void Game::takeTurn(Play* turn) {
+void Game::takeTurn(Move* turn) {
     int pos = -1;
     if(columns[turn->moveColumn][ROW_COUNT-1]==0) {
         pos=ROW_COUNT-1;
@@ -76,19 +76,19 @@ int main()
     while(!finished) {
         playTime.printBoard();
 
-        Play* turn1 = new Play;
-        turn1->playerID=1;
+        Move* turn1 = new Move;
+        turn1->player=1;
         cout << "Enter red player's move column - ";
-        cin >> turn1->moveColumn;
-        --turn1->moveColumn;
+        cin >> turn1->column;
+        --turn1->column;
         playTime.takeTurn(turn1);
         playTime.printBoard();
 
-        Play* turn2 = new Play;
-        turn2->playerID=2;
+        Move* turn2 = new Move;
+        turn2->player=2;
         cout << "Enter yellow player's move column - ";
-        cin >> turn2->moveColumn;
-        --turn2->moveColumn;
+        cin >> turn2->column;
+        --turn2->column;
         playTime.takeTurn(turn2);
 
         playTime.printBoard();
