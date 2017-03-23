@@ -2,6 +2,7 @@
 #define AI_H
 
 #include "Move.h"
+#include "GameState.h"
 
 class AI {
 private:
