@@ -17,7 +17,7 @@ int main()
     cin >> webcam;*/
     //TODO Webcam implementation
     srand ( time(NULL) );
-    bool finished = false;
+    int finished = false;
     Move turn;
     Game playTime;
     int player = 1;
