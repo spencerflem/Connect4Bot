@@ -18,8 +18,10 @@ class Game
         void printBoard();
         //Makes a move and updates board
         bool takeTurn(Move turn);
-        //Checks to see if a player has won the game
-        bool isWin();
+        //Checks to see if a player has won the game; Returns the winner's ID
+        int isWin();
+        //Returns the current gameState
+        GameState getGameState();
     private:
         int columns[COLUMN_COUNT][ROW_COUNT];
         int rows[ROW_COUNT][COLUMN_COUNT];

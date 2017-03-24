@@ -3,7 +3,7 @@
 #include "Voice.h"
 #include "Move.h"
 #include "Game.h"
-
+#include "Game.cpp"
 #include <stdlib.h>
 #include <time.h>
 
@@ -33,6 +33,15 @@ int main()
 		}
         playTime.printBoard();
         finished = playTime.isWin();
+        cout << finished <<endl;
     }
+    string color = "";
+    if(finished == 1) {
+        color = "Red";
+    }
+    else if(finished == 2){
+        color = "Yellow";
+    }
+    cout << color << " player has won the game!" << endl;
     return 0;
 }
