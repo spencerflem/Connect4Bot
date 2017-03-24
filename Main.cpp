@@ -3,7 +3,7 @@
 #include "Voice.h"
 #include "Move.h"
 #include "Game.h"
-
+#include "Game.cpp"
 #include <stdlib.h>
 #include <time.h>
 
