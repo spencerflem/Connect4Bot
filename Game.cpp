@@ -21,13 +21,13 @@ Game::Game()
 }
 
 void Game::printBoard() {
-    std::cout << "###########################################" << std::endl;
+    std::cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << std::endl;
     for(int i=0; i<ROW_COUNT; ++i) {
         for(int j=0; j<COLUMN_COUNT; ++j) {
-            std::cout << "#  " << rows[i][j] << "  ";
+            std::cout << "|   " << rows[i][j] << "   ";
         }
-        std::cout << "#" << std::endl;
-        std::cout << "###########################################" << std::endl;
+        std::cout << "|" << std::endl;
+        std::cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << std::endl;
     }
 }
 
