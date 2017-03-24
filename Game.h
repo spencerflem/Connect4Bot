@@ -20,6 +20,8 @@ class Game
         bool takeTurn(Move turn);
         //Checks to see if a player has won the game
         bool isWin();
+        //Returns the current gameState
+        GameState getGameState();
     private:
         int columns[COLUMN_COUNT][ROW_COUNT];
         int rows[ROW_COUNT][COLUMN_COUNT];

@@ -35,23 +35,32 @@ bool Game::takeTurn(Move turn) {
     int pos = -1;
     if(columns[turn.column][ROW_COUNT-1]==0) {
         pos=ROW_COUNT-1;
-        std::cout << "MEME" <<std::endl;
     }
     else while(columns[turn.column][pos+1]==0) {
         pos++;
     }
     if(pos==-1) {
-        std::cout << "Error: Column full";
+        std::cout << "Error: Column full" << std::endl;
         return false;
     }
     columns[turn.column][pos] = turn.player;
     rows[pos][turn.column] = turn.player;
-    diagonal_left_down_right[turn.column+(5-pos)][turn.column] = turn.player;
-    diagonal_right_down_left[(6-turn.column)+(5-pos)][6-turn.column] = turn.player;
+    diagonal_left_down_right[turn.column+(ROW_COUNT-pos-1)][turn.column] = turn.player;
+    diagonal_right_down_left[(COLUMN_COUNT-turn.column-1)+(ROW_COUNT-pos-1)][COLUMN_COUNT-turn.column-1] = turn.player;
     return true;
 }
 
 bool Game::isWin() {
     //TODO
     return false;
+}
+
+GameState Game::getGameState() {
+    GameState gs;
+    for(int i=0; i<ROW_COUNT; ++i) {
+        for(int j=0; j<COLUMN_COUNT; ++j) {
+            gs.board[i][j] = rows[i][j];
+        }
+    }
+    return gs;
 }
