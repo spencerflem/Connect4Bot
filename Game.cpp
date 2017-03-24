@@ -50,9 +50,25 @@ bool Game::takeTurn(Move turn) {
     return true;
 }
 
-bool Game::isWin() {
-    //TODO
-    return false;
+int Game::isWin() {
+    for(int i=0; i<ROW_COUNT; ++i) {
+        for(int j=0; j<COLUMN_COUNT; ++j) {
+            //std::cout << i << ", " << j <<", " <<rows[i][j]<< std::endl;
+            if(rows[i][j] != 0) {
+                //Check rows for win condition
+                if(j<=3 && (rows[i][j]==rows[i][j+1] && rows[i][j]==rows[i][j+2] && rows[i][j]==rows[i][j+3])) {
+                    return rows[i][j];
+                }
+                //Check column for win condition
+                else if(i<=2 && (rows[i][j]==rows[i+1][j] && rows[i][j]==rows[i+2][j] && rows[i][j]==rows[i+3][j])) {
+                    return rows[i][j];
+                }
+                //Check diagonal for win condition
+                //TODO (Help ME!!!!)
+            }
+        }
+    }
+    return 0;
 }
 
 GameState Game::getGameState() {

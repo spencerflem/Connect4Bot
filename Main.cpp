@@ -17,12 +17,12 @@ int main()
     cin >> webcam;*/
     //TODO Webcam implementation
     srand ( time(NULL) );
-    bool finished = false;
     Move turn1;
     Move turn2;
     Game playTime;
     playTime.printBoard();
-    while(!finished) {
+    int finished = 0;
+    while(finished==0) {
         turn1 = Move();
         turn1.player=1;
         cout << "Enter red player's move column - ";
@@ -30,6 +30,10 @@ int main()
         --turn1.column;
         playTime.takeTurn(turn1);
         playTime.printBoard();
+        finished = playTime.isWin();
+        if(finished!=0){
+            break;
+        }
 
         turn2 = Move();
         turn2.player=2;
@@ -37,9 +41,17 @@ int main()
         cin >> turn2.column;
         --turn2.column;
         playTime.takeTurn(turn2);
-
         playTime.printBoard();
         finished = playTime.isWin();
+        cout << finished <<endl;
     }
+    string color = "";
+    if(finished == 1) {
+        color = "Red";
+    }
+    else if(finished == 2){
+        color = "Yellow";
+    }
+    cout << color << " player has won the game!" << endl;
     return 0;
 }
