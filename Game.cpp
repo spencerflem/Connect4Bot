@@ -13,8 +13,8 @@ Game::Game() {
     }
     for(int i=0; i<DIAGONAL_COUNT; ++i) {
         for(int j=0; j<DIAGONAL_COUNT; ++j) {
-            diagonal_left_down_right[i][j] = 0;
-            diagonal_right_down_left[i][j] = 0;
+            diagLDR[i][j] = 0;
+            diagRDL[i][j] = 0;
         }
     }
 }
@@ -48,15 +48,14 @@ bool Game::takeTurn(Move turn) {
     }
     columns[turn.column][pos] = turn.player;
     rows[pos][turn.column] = turn.player;
-    diagonal_left_down_right[turn.column+(ROW_COUNT-pos-1)][turn.column] = turn.player;
-    diagonal_right_down_left[(COLUMN_COUNT-turn.column-1)+(ROW_COUNT-pos-1)][COLUMN_COUNT-turn.column-1] = turn.player;
+    diagLDR[turn.column+(ROW_COUNT-pos-1)][turn.column] = turn.player;
+    diagRDL[(COLUMN_COUNT-turn.column-1)+(ROW_COUNT-pos-1)][COLUMN_COUNT-turn.column-1] = turn.player;
     return true;
 }
 
 int Game::isWin() {
     for(int i=0; i<ROW_COUNT; ++i) {
         for(int j=0; j<COLUMN_COUNT; ++j) {
-            //std::cout << i << ", " << j <<", " <<rows[i][j]<< std::endl;
             if(rows[i][j] != 0) {
                 //Check rows for win condition
                 if(j<=3 && (rows[i][j]==rows[i][j+1] && rows[i][j]==rows[i][j+2] && rows[i][j]==rows[i][j+3])) {
@@ -66,8 +65,15 @@ int Game::isWin() {
                 else if(i<=2 && (rows[i][j]==rows[i+1][j] && rows[i][j]==rows[i+2][j] && rows[i][j]==rows[i+3][j])) {
                     return rows[i][j];
                 }
-                //Check diagonal for win condition
-                //TODO (Help ME!!!!)
+            }
+            //Check diagonal for win condition
+            if(j<=2) {
+                if(diagLDR[i+3][j]!=0 && (diagLDR[i+3][j]==diagLDR[i+3][j+1] && diagLDR[i+3][j]==diagLDR[i+3][j+2] && diagLDR[i+3][j]==diagLDR[i+3][j+3])) {
+                    return diagLDR[i+3][j];
+                }
+                if(diagRDL[i+3][j]!=0 && (diagRDL[i+3][j]==diagRDL[i+3][j+1] && diagRDL[i+3][j]==diagRDL[i+3][j+2] && diagRDL[i+3][j]==diagRDL[i+3][j+3])) {
+                    return diagRDL[i+3][j];
+                }
             }
         }
     }
