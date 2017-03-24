@@ -1,7 +1,6 @@
 #include "Game.h"
 
-Game::Game()
-{
+Game::Game() {
     for(int i=0; i<COLUMN_COUNT; ++i) {
         for(int j=0; j<ROW_COUNT; ++j) {
             columns[i][j] = 0;
@@ -32,6 +31,10 @@ void Game::printBoard() {
 }
 
 bool Game::takeTurn(Move turn) {
+	if(turn.column < 0 || turn.column >= COLUMN_COUNT) {
+		std::cout << "Error: Illegal Move" << std::endl;
+        return false;
+	}
     int pos = -1;
     if(columns[turn.column][ROW_COUNT-1]==0) {
         pos=ROW_COUNT-1;
