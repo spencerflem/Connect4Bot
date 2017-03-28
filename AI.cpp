@@ -19,8 +19,8 @@ bool AI::setDifficulty(int difficulty) {
 	return false;
 }
 
-Move AI::makeMove(GameState gameState) {
-	return Move((rand()%2) +1, rand()%7);
+Move AI::makeMove(GameState gameState, int player) {
+	return Move(player, rand()%7);
 }
 
 double* AI::getOptions(GameState gameState) {

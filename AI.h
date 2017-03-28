@@ -12,7 +12,7 @@ public:
 	AI(int difficulty);
 	int getDifficulty();
 	bool setDifficulty(int difficulty);
-	Move makeMove(GameState gameState);
+	Move makeMove(GameState gameState, int player);
 };
 
 #endif
