@@ -8,7 +8,7 @@
 
 const int COLUMN_COUNT = 7;
 const int ROW_COUNT = 6;
-const int DIAGONAL_COUNT = 11;
+const int DIAGONAL_COUNT = 12;
 const int DIAGONAL_LENGTH = 6;
 
 class Game
@@ -26,8 +26,10 @@ class Game
     private:
         int columns[COLUMN_COUNT][ROW_COUNT];
         int rows[ROW_COUNT][COLUMN_COUNT];
-        int diagonal_left_down_right[DIAGONAL_COUNT][DIAGONAL_LENGTH];
-        int diagonal_right_down_left[DIAGONAL_COUNT][DIAGONAL_LENGTH];
+        //LDR abbreviates LeftDownRight, array of the board data stored going in the 315 degree direction
+        int diagLDR[DIAGONAL_COUNT][DIAGONAL_LENGTH];
+        //RDL abbreviates RightDownLeft, array of the board data stored going in the 225 degree direction
+        int diagRDL[DIAGONAL_COUNT][DIAGONAL_LENGTH];
 };
 
 #endif // GAME_H
