@@ -4,6 +4,7 @@
 #include "Move.h"
 #include <iostream>
 #include <string>
+#include "GameState.h"
 
 const int COLUMN_COUNT = 7;
 const int ROW_COUNT = 6;
