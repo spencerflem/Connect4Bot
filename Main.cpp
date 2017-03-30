@@ -14,7 +14,6 @@
 
 using namespace std;
 
-
 int main(int argc, char *argv[])
 {
     srand ( time(NULL) );
@@ -30,13 +29,12 @@ int main(int argc, char *argv[])
     int player = 1;
     playTime.printBoard();
     while(!finished) {
-		(player == 1) ? turn = ai.makeMove(playTime.getGameState(), player) : turn = input.getMove(player);
+		(player == 1)? turn = ai.makeMove(playTime.getGameState(), player) : turn = input.getMove(player);
         if (playTime.takeTurn(turn)) {
 			(player==1)? player++ : player--;
 		}
         playTime.printBoard();
         finished = playTime.isWin();
-        cout << finished <<endl;
     }
     string color = "";
     if(finished == 1) {

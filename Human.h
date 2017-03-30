@@ -9,6 +9,7 @@
 class Human: public Input {
 public:
 	Move getMove(int player);
+	//Gathers move over terminal
 };
 
 #endif
