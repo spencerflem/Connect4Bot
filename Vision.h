@@ -5,6 +5,7 @@
 #include "Move.h"
 #include <opencv2/opencv.hpp>
 #include <vector>
+#include <cmath>
 
 class Vision: public Input {
 public:
