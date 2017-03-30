@@ -7,7 +7,7 @@
 
 const int COLUMN_COUNT = 7;
 const int ROW_COUNT = 6;
-const int DIAGONAL_COUNT = 11;
+const int DIAGONAL_COUNT = 12;
 const int DIAGONAL_LENGTH = 6;
 
 class Game

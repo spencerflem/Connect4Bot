@@ -48,8 +48,20 @@ bool Game::takeTurn(Move turn) {
     }
     columns[turn.column][pos] = turn.player;
     rows[pos][turn.column] = turn.player;
-    diagLDR[turn.column+(ROW_COUNT-pos-1)][turn.column] = turn.player;
-    diagRDL[(COLUMN_COUNT-turn.column-1)+(ROW_COUNT-pos-1)][COLUMN_COUNT-turn.column-1] = turn.player;
+    //Funcky formulas to set up diagonals from left to right
+    if((turn.column+(ROW_COUNT-pos-1)) < 6) {
+        diagLDR[turn.column+(ROW_COUNT-pos-1)][turn.column] = turn.player;
+    }
+    else {
+        diagLDR[turn.column+(ROW_COUNT-pos-1)][pos] = turn.player;
+    }
+    //Funcky formulas to set up diagonals from right to left
+    if((COLUMN_COUNT-turn.column-1)+(ROW_COUNT-pos-1) < 6) {
+        diagRDL[(COLUMN_COUNT-turn.column-1)+(ROW_COUNT-pos-1)][COLUMN_COUNT-turn.column-1] = turn.player;
+    }
+    else {
+        diagRDL[(COLUMN_COUNT-turn.column-1)+(ROW_COUNT-pos-1)][pos] = turn.player;
+    }
     return true;
 }
 
