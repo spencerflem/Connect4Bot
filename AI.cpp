@@ -45,6 +45,17 @@ Move AI::makeMove(GameState gameState, int player) {
 }
 
 double* AI::getOptions(GameState gameState) {
-	return new double[7];
-	//TODO traverse the array and return the numbers of non-Full columns
+	int board* = gameState; //just because pointers
+	new options[7] = {0,0,0,0,0,0,0}; //array to be returned, index of open colums
+	int taken = 0; //counter for number of
+	for (int i = 0; i < COLUMN_COUNT; ++i) {
+		for (int j = 0; j < ROW_COUNT; ++j) {
+			if (board[j][i] != 0)
+				taken++; //increments for each place taken in a column
+		}
+		if (taken == 0)
+			options[i] = 3; //a 3 denotes an available column...for now
+		taken = 0;
+	}
+	return options; //an int array with a 3 denoting an open column
 }
