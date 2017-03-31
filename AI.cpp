@@ -20,7 +20,8 @@ bool AI::setDifficulty(int difficulty) {
 }
 
 Move AI::makeMove(GameState gameState, int player) {
-	return Move(player, rand()%7);//TODO getOptions and make a moveconsidering the options
+	return Move(player, rand()%7);
+	//TODO getOptions and make a moveconsidering the options
 	/*
 		simple offensive AI:
 		always pick the position with the most 1's surrounding it.
