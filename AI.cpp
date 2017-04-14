@@ -20,9 +20,9 @@ bool AI::setDifficulty(int difficulty) {
 }
 
 Move AI::makeMove(GameState gameState, int player) {
-	int availableColumns[7] = getOptions(gameState);
+	double *availableColumns = getOptions(gameState);
 	int location = -1;
-	for (int i = 0; i < COLUMN_COUNT; ++i) {
+	for (int i = 0; i < COLUMN_COUNT_2; ++i) {
 		if (availableColumns[i] == 3)
 			location = i;
 	}
@@ -56,17 +56,17 @@ Move AI::makeMove(GameState gameState, int player) {
 }
 
 double* AI::getOptions(GameState gameState) {
-	int board* = gameState; //just because pointers
-	new options[7] = {0,0,0,0,0,0,0}; //array to be returned, index of open colums
-	int taken = 0; //counter for number of
-	for (int i = 0; i < COLUMN_COUNT; ++i) {
-		for (int j = 0; j < ROW_COUNT; ++j) {
-			if (board[j][i] != 0)
-				taken++; //increments for each place taken in a column
+	double *options = new double[7];
+	int taken = 0;
+	for (int i = 0; i < COLUMN_COUNT_2; ++i) {
+		for (int j = 0; j < ROW_COUNT_2; ++j) {
+			if (gameState.board[j][i] != 0)
+				taken++;
 		}
 		if (taken == 0)
 			options[i] = 3; //a 3 denotes an available column...for now
+		options[i] = 0;
 		taken = 0;
 	}
-	return options; //an int array with a 3 denoting an open column
+	return options;
 }

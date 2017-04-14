@@ -20,15 +20,15 @@ int main(int argc, char *argv[])
     int finished = false;
     Move turn;
     Game game;
-	bool vision = false;
 	#ifdef VISION
 	Vision input = Vision();
-	vision = true;
+	const bool vision = true;
 	#else
 	Human input = Human();
+	const bool vision = false;
 	#endif
 	AI ai = AI(0);
-    int player = 2;
+    int player = 1;
     game.printBoard();
     while(!finished) {
 		if (player == 1) {
