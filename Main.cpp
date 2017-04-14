@@ -19,22 +19,41 @@ int main(int argc, char *argv[])
     srand ( time(NULL) );
     int finished = false;
     Move turn;
-    Game playTime;
+    Game game;
+	bool vision = false;
 	#ifdef VISION
 	Vision input = Vision();
+	vision = true;
 	#else
 	Human input = Human();
 	#endif
 	AI ai = AI(0);
-    int player = 1;
-    playTime.printBoard();
+    int player = 2;
+    game.printBoard();
     while(!finished) {
-		(player == 1)? turn = ai.makeMove(playTime.getGameState(), player) : turn = input.getMove(player);
-        if (playTime.takeTurn(turn)) {
+		if (player == 1) {
+			turn = ai.makeMove(game.getGameState(), player);
+			if (vision) {
+				std::cout << "Please play in column " << turn.column+1 << std::endl;
+				Move playerTurn = input.getMove(game.getGameState(), player);
+				if (playerTurn != turn) {
+					std::cout << "YOU PLAYED " << ((playerTurn.player==1)? "RED" : "YELLOW") << " COLUMN " << playerTurn.column+1 << " NOT " << ((turn.player == 1) ? "RED" : "YELLOW") << " COLUMN " << turn.column+1 << std::endl;
+					return -1; //more graceful way?
+				}
+			}
+		}
+		else {
+			turn = input.getMove(game.getGameState(), player);
+			if (turn.player != player) {
+				std::cout << "YOU PLAYED THE WRONG COLOR, DUMMY" << std::endl;
+				return -1; //more graceful way?
+			}
+		}
+        if (game.takeTurn(turn)) {
 			(player==1)? player++ : player--;
 		}
-        playTime.printBoard();
-        finished = playTime.isWin();
+        game.printBoard();
+        finished = game.isWin();
     }
     string color = "";
     if(finished == 1) {

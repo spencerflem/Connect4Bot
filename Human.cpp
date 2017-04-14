@@ -1,6 +1,6 @@
 #include "Human.h"
 
-Move Human::getMove(int player) {
+Move Human::getMove(GameState gameState, int player) {
 	std::cout << "player: " << player << std::endl;
 	Move turn = Move();
 	turn.player = player;
