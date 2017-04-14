@@ -21,15 +21,11 @@ bool AI::setDifficulty(int difficulty) {
 
 Move AI::makeMove(GameState gameState, int player) {
 	double *availableColumns = getOptions(gameState);
-	int location = -1;
-	for (int i = 0; i < COLUMN_COUNT_2; ++i) {
-		if (availableColumns[i] == 3)
-			location = i;
-	}
-	if (location != -1)
-		return Move(player, location);
-	else
-		return Move(player, rand()%7);
+	int col;
+	do {
+		col = rand() % 7;
+	} while (availableColumns[col] != 3);
+	return Move(player, col);
 	//TODO getOptions and make a moveconsidering the options
 	/*
 		simple offensive AI:
@@ -63,9 +59,10 @@ double* AI::getOptions(GameState gameState) {
 			if (gameState.board[j][i] != 0)
 				taken++;
 		}
-		if (taken == 0)
+		if (taken < ROW_COUNT_2)
 			options[i] = 3; //a 3 denotes an available column...for now
-		options[i] = 0;
+		else
+			options[i] = 0;
 		taken = 0;
 	}
 	return options;
