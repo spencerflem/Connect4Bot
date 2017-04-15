@@ -53,7 +53,6 @@ int main(int argc, char *argv[])
 					return -1; //more graceful way?
 				}
 			}
-            output.printBoard(game.getGameState());
 		}
 		else {
 			turn = input.getMove(game.getGameState(), player);
@@ -63,7 +62,13 @@ int main(int argc, char *argv[])
 			}
 		}
         if (game.takeTurn(turn)) {
-			(player==1)? player++ : player--;
+			if(player==1) {
+                player++;
+                output.printBoard(game.getGameState());
+            }
+            else{
+                player--;
+            }
 		}
         finished = game.isWin();
     }
