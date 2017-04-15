@@ -9,6 +9,12 @@
 #include <cmath>
 #include <algorithm>
 
+#ifdef VOICE
+#include "Voice.h"
+#else
+#include "Text.h"
+#endif
+
 
 class Vision: public Input {
 private:
@@ -21,6 +27,11 @@ private:
 	Move findMoveDifference(GameState origState, GameState currentState);
 	void thresholdFrame(cv::Mat frame, cv::Mat threshs[3]);
 	void appendPieces(cv::Mat thresh, std::vector<Piece> &pieces, int player);
+	#ifdef VOICE
+		Voice output = Voice();
+	#else
+		Text output = Text();
+	#endif
 public:
 	Vision();
 	Move getMove(GameState origState, int player);

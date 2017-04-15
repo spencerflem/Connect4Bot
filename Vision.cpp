@@ -9,6 +9,7 @@ Move Vision::getMove(GameState origState, int player) {
 	cv::VideoCapture capture(0);
 
 	if (!capture.isOpened()) {
+		output.visionError();
 		throw "Capture Failed";
 	}
 
@@ -27,7 +28,7 @@ Move Vision::getMove(GameState origState, int player) {
 			if (currentState == backOne && currentState == backTwo) {
 				if (currentState != origState) {
 					if (frameCount == 3) {
-						std::cout << "Board Mismatch!" << std::endl;
+						output.visionError();
 						throw "Board Mismatch";
 					}
 					return findMoveDifference(origState, currentState);
@@ -140,7 +141,7 @@ Move Vision::findMoveDifference(GameState origState, GameState currentState) {
 		for (int j = 0; j < 7; j++) {
 			if (origState.board[i][j] != currentState.board[i][j]) {
 				if (alreadyFound) {
-					std::cout << "Multiple Moves!" << std::endl;
+					output.visionError();
 					throw "Multiple Moves";
 				}
 				alreadyFound = true;

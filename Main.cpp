@@ -3,16 +3,25 @@
 #include "Move.h"
 #include "Game.h"
 #include "Input.h"
+#include "Output.h"
 #include <stdlib.h>
 #include <time.h>
 
 #ifdef VISION
 #include "Vision.h"
+const bool vision = true;
 #else
 #include "Human.h"
+const bool vision = false;
 #endif
 
-using namespace std;
+#ifdef VOICE
+const bool voice = true;
+#else
+const bool voice = false;
+#endif
+
+//using namespace std;
 
 int main(int argc, char *argv[])
 {
@@ -22,22 +31,25 @@ int main(int argc, char *argv[])
     Game game;
 	#ifdef VISION
 	Vision input = Vision();
-	const bool vision = true;
 	#else
 	Human input = Human();
-	const bool vision = false;
+	#endif
+	#ifdef VOICE
+	Voice output = Voice();
+	#else
+	Text output = Text();
 	#endif
 	AI ai = AI(0);
     int player = 1;
-    game.printBoard();
+    output.printBoard(game.getGameState());
     while(!finished) {
 		if (player == 1) {
 			turn = ai.makeMove(game.getGameState(), player);
 			if (vision) {
-				std::cout << "Please play in column " << turn.column+1 << std::endl;
+				output.requestMove(turn.column + 1);
 				Move playerTurn = input.getMove(game.getGameState(), player);
 				if (playerTurn != turn) {
-					std::cout << "YOU PLAYED " << ((playerTurn.player==1)? "RED" : "YELLOW") << " COLUMN " << playerTurn.column+1 << " NOT " << ((turn.player == 1) ? "RED" : "YELLOW") << " COLUMN " << turn.column+1 << std::endl;
+					output.badMove();
 					return -1; //more graceful way?
 				}
 			}
@@ -45,23 +57,16 @@ int main(int argc, char *argv[])
 		else {
 			turn = input.getMove(game.getGameState(), player);
 			if (turn.player != player) {
-				std::cout << "YOU PLAYED THE WRONG COLOR, DUMMY" << std::endl;
+				output.badMove();
 				return -1; //more graceful way?
 			}
 		}
         if (game.takeTurn(turn)) {
 			(player==1)? player++ : player--;
 		}
-        game.printBoard();
+        output.printBoard(game.getGameState());
         finished = game.isWin();
     }
-    string color = "";
-    if(finished == 1) {
-        color = "Red";
-    }
-    else if(finished == 2){
-        color = "Yellow";
-    }
-    cout << color << " player has won the game!" << endl;
+	output.announceWinner(finished);
     return 0;
 }
