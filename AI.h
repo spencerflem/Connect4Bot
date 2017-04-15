@@ -11,6 +11,7 @@ class AI {
 private:
 	int difficulty;
 	double* getOptions(GameState gameState);
+	int dangerSpot(GameState gameState);
 public:
 	AI(int difficulty);
 	int getDifficulty();
