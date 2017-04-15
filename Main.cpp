@@ -42,7 +42,6 @@ int main(int argc, char *argv[])
 	#endif
 	AI ai = AI(0);
     int player = 1;
-    output.printBoard(game.getGameState());
     while(!finished) {
 		if (player == 1) {
 			turn = ai.makeMove(game.getGameState(), player);
@@ -54,6 +53,7 @@ int main(int argc, char *argv[])
 					return -1; //more graceful way?
 				}
 			}
+            output.printBoard(game.getGameState());
 		}
 		else {
 			turn = input.getMove(game.getGameState(), player);
@@ -65,9 +65,9 @@ int main(int argc, char *argv[])
         if (game.takeTurn(turn)) {
 			(player==1)? player++ : player--;
 		}
-        output.printBoard(game.getGameState());
         finished = game.isWin();
     }
+    output.printBoard(game.getGameState());
 	output.announceWinner(finished);
     return 0;
 }
