@@ -68,35 +68,50 @@ double* AI::getOptions(GameState gameState) {
 	return options;
 }
 
-int* AI::threeInARow(GameState GameState) {
-	int *arr = new int[2];
-	arr[0] = -1;
-	arr[1] = -1;
-	for(int i=0; i<ROW_COUNT; ++i) {
-        for(int j=0; j<COLUMN_COUNT; ++j) {
-            if(rows[i][j] != 0) {
-                //Check row? for win condition
-                if(j<=(COLUMN_COUNT-3) && (rows[i][j]==rows[i][j+1] && rows[i][j]==rows[i][j+2])) {
-					arr[0] = i;
-					arr[1] = j;
-                    return arr;
+int AI::dangerSpot(GameState rows) {
+	//This will return the column that the AI must play in to avoid a loss on the next turn.
+	int dangerCol = -1;
+	for(int i=0; i<ROW_COUNT_2; ++i) {
+        for(int j=0; j<COLUMN_COUNT_2; ++j) {
+            if(rows.board[i][j] != 0) {
+                //Check row for 3 in a row condition
+                if(j<=(COLUMN_COUNT_2-3) && (rows.board[i][j]==rows.board[i][j+1] && rows.board[i][j]==rows.board[i][j+2])) {
+					//Check to see if the 3 in a row lies on the board's left border and is empty
+					if(j!=0 && rows.board[i][j-1]==0) {
+						//Check to see if the left side of the 3 in a row is a playable spot.
+						if(i==ROW_COUNT_2-1) {
+							return j-1;
+						}
+						else if(rows.board[i+1][j-1] != 0) {
+							return j-1;
+						}
+					}
+					//Check to see if the 3 in a row lies on the board's right border and is empty
+					if(j!=COLUMN_COUNT_2-1 && rows.board[i][j+1]==0) {
+						//Check to see if the right side of the 3 in a row is a playable spot.
+						if(i==ROW_COUNT_2-1) {
+							return j+1;
+						}
+						else if(rows.board[i+1][j+1] != 0) {
+							return j+1;
+						}
+					}
                 }
-                //Check column? for win condition
-                else if(i<=(ROW_COUNT-3) && (rows[i][j]==rows[i+1][j] && rows[i][j]==rows[i+2][j])) {
-					arr[1] = i;
-					arr[0] = j;
-                    return arr;
+                //Check column for 3 in a row condition
+                else if(i<=(ROW_COUNT_2-3) && (rows.board[i][j]==rows.board[i+1][j] && rows.board[i][j]==rows.board[i+2][j])) {
+
                 }
             }
             /*//Check diagonal for win condition
             if(j<=3) {
                 if(diagLDR[i+3][j]!=0 && (diagLDR[i+3][j]==diagLDR[i+3][j+1] && diagLDR[i+3][j]==diagLDR[i+3][j+2])) {
-                    return arr;
+
                 }
                 if(diagRDL[i+3][j]!=0 && (diagRDL[i+3][j]==diagRDL[i+3][j+1] && diagRDL[i+3][j]==diagRDL[i+3][j+2])) {
-                    return arr;
+
                 }
             }*/
         }
     }
+	return dangerCol;
 }
