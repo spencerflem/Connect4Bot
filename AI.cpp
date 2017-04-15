@@ -98,8 +98,11 @@ int AI::dangerSpot(GameState rows) {
 					}
                 }
                 //Check column for 3 in a row condition
-                else if(i<=(ROW_COUNT_2-3) && (rows.board[i][j]==rows.board[i+1][j] && rows.board[i][j]==rows.board[i+2][j])) {
-
+                if(i<=(ROW_COUNT_2-3) && (rows.board[i][j]==rows.board[i+1][j] && rows.board[i][j]==rows.board[i+2][j])) {
+					//Check to see if the 3 in a column lies below the board's top edge and if the space above is empty
+					if(i!=0 && rows.board[i-1][j]==0) {
+						return j;
+					}
                 }
             }
             /*//Check diagonal for win condition
