@@ -11,6 +11,7 @@ class AI {
 private:
 	int difficulty;
 	double* getOptions(GameState gameState);
+	int* AI::threeInARow(GameState GameState);
 public:
 	AI(int difficulty);
 	int getDifficulty();

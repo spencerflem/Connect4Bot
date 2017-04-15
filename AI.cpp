@@ -67,3 +67,36 @@ double* AI::getOptions(GameState gameState) {
 	}
 	return options;
 }
+
+int* AI::threeInARow(GameState GameState) {
+	int *arr = new int[2];
+	arr[0] = -1;
+	arr[1] = -1;
+	for(int i=0; i<ROW_COUNT; ++i) {
+        for(int j=0; j<COLUMN_COUNT; ++j) {
+            if(rows[i][j] != 0) {
+                //Check row? for win condition
+                if(j<=(COLUMN_COUNT-3) && (rows[i][j]==rows[i][j+1] && rows[i][j]==rows[i][j+2])) {
+					arr[0] = i;
+					arr[1] = j;
+                    return arr;
+                }
+                //Check column? for win condition
+                else if(i<=(ROW_COUNT-3) && (rows[i][j]==rows[i+1][j] && rows[i][j]==rows[i+2][j])) {
+					arr[1] = i;
+					arr[0] = j;
+                    return arr;
+                }
+            }
+            /*//Check diagonal for win condition
+            if(j<=3) {
+                if(diagLDR[i+3][j]!=0 && (diagLDR[i+3][j]==diagLDR[i+3][j+1] && diagLDR[i+3][j]==diagLDR[i+3][j+2])) {
+                    return arr;
+                }
+                if(diagRDL[i+3][j]!=0 && (diagRDL[i+3][j]==diagRDL[i+3][j+1] && diagRDL[i+3][j]==diagRDL[i+3][j+2])) {
+                    return arr;
+                }
+            }*/
+        }
+    }
+}
