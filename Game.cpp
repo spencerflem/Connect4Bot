@@ -1,13 +1,5 @@
 #include "Game.h"
 
-#ifdef VOICE
-#include "Voice.h"
-Voice output = Voice();
-#else
-#include "Text.h"
-Text output = Text();
-#endif
-
 Game::Game() {
     for(int i=0; i<COLUMN_COUNT; ++i) {
         for(int j=0; j<ROW_COUNT; ++j) {

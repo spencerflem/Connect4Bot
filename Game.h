@@ -6,6 +6,12 @@
 #include <string>
 #include "GameState.h"
 
+#ifdef VOICE
+#include "Voice.h"
+#else
+#include "Text.h"
+#endif
+
 const int COLUMN_COUNT = 7;
 const int ROW_COUNT = 6;
 const int DIAGONAL_COUNT = 12;
@@ -22,6 +28,13 @@ class Game
         //Returns the current gameState
         GameState getGameState();
     private:
+	#ifdef VOICE
+	#include "Voice.h"
+			Voice output = Voice();
+	#else
+	#include "Text.h"
+			Text output = Text();
+	#endif
         int columns[COLUMN_COUNT][ROW_COUNT];
         int rows[ROW_COUNT][COLUMN_COUNT];
         //LDR abbreviates LeftDownRight, array of the board data stored going in the 315 degree direction
