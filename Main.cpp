@@ -1,5 +1,4 @@
 #include "AI.h"
-#include "Voice.h"
 #include "Move.h"
 #include "Game.h"
 #include "Input.h"
@@ -16,8 +15,10 @@ const bool vision = false;
 #endif
 
 #ifdef VOICE
+#include "Voice.h"
 const bool voice = true;
 #else
+#include "Text.h"
 const bool voice = false;
 #endif
 
