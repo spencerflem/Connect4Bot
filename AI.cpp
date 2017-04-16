@@ -20,7 +20,6 @@ bool AI::setDifficulty(int difficulty) {
 }
 
 Move AI::makeMove(GameState gameState, int player) {
-	// double *availableColumns = getOptions(gameState);
 	bool firstMove = true;
 	for (int i = 0; i < COLUMN_COUNT_2; ++i) {
 		if (gameState.board[ROW_COUNT_2-1][i] != 0)
@@ -29,25 +28,12 @@ Move AI::makeMove(GameState gameState, int player) {
 	if (firstMove)
 		return Move(player, 3);
 	else {
-		int strategy = rand() % 2;
-		switch (strategy) {
-			case 0: {
-				double *availableColumns = getOptions(gameState);
-				int col = dangerSpot(gameState);
-				if(col == -1) {
-					do {
-						col = rand() % 7;
-					} while (availableColumns[col] != 3);
-					delete availableColumns;
-					return Move(player, col);
-				}
-				else {
-					return Move(player, col);
-				}
-			}
-				break;
-			case 1: return Move(player, thomasAI(gameState));
-		}
+		// double *availableColumns = getOptions(gameState);
+		int col = dangerSpot(gameState);
+		if(col != -1)
+			return Move(player, col);
+		else
+			return Move(player, thomasAI(gameState));
 	}
 	return Move(player, rand()%7);
 }
