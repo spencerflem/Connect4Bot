@@ -12,7 +12,7 @@ void Text::printBoard(GameState gameState) {
 }
 
 void Text::badMove() {
-	std::cout << "WRONG MOVE, DUMMY!" << std::endl;
+	std::cout << "INVALID MOVE" << std::endl;
 }
 
 void Text::requestMove(int column) {
