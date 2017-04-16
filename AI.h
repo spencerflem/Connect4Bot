@@ -11,12 +11,21 @@ class AI {
 private:
 	int difficulty;
 	double* getOptions(GameState gameState);
+<<<<<<< HEAD
+=======
+	int dangerSpot(GameState rows);
+	int decisiveAI(GameState rows);
+>>>>>>> refs/remotes/origin/master
 public:
 	AI(int difficulty);
 	int getDifficulty();
 	bool setDifficulty(int difficulty);
 	Move makeMove(GameState gameState, int player);
+<<<<<<< HEAD
 	int dangerSpot(GameState gameState);
+=======
+
+>>>>>>> refs/remotes/origin/master
 };
 
 #endif

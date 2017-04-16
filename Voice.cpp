@@ -6,19 +6,41 @@ void Voice::printBoard(GameState gameState) {
 
 void Voice::badMove() {
 	text.badMove();
-	PlaySound(TEXT("audio/badmove.wav"), NULL, SND_ALIAS | SND_APPLICATION);
+	PlaySound(TEXT("audio/badmove.wav"), NULL, SND_ALIAS | SND_APPLICATION | SND_ASYNC);
 }
 
 void Voice::requestMove(int column) {
 	text.requestMove(column);
-	const char *filename = ("audio/pleasemoveincolumn" + std::to_string(column) + ".wav").c_str();
-	PlaySound(TEXT(filename), NULL, SND_ALIAS | SND_APPLICATION);
+	const char *filename;
+	switch (column) {
+	case 1: filename = "audio/pleasemoveincolumn1.wav";
+		break;
+	case 2: filename = "audio/pleasemoveincolumn2.wav";
+		break;
+	case 3: filename = "audio/pleasemoveincolumn3.wav";
+		break;
+	case 4: filename = "audio/pleasemoveincolumn4.wav";
+		break;
+	case 5: filename = "audio/pleasemoveincolumn5.wav";
+		break;
+	case 6: filename = "audio/pleasemoveincolumn6.wav";
+		break;
+	case 7: filename = "audio/pleasemoveincolumn7.wav";
+		break;
+	default: filename = "audio/badmove.wav";
+		break;
+	}
+	PlaySound(TEXT(filename), NULL, SND_ALIAS | SND_APPLICATION | SND_ASYNC);
 
 }
 
 void Voice::announceWinner(int player) {
 	text.announceWinner(player);
-	const char *filename = ("audio/player" + std::to_string(player) + "wins.wav").c_str();
+	const char *filename;
+	if (player == 1)
+		filename = ("audio/redwins.wav");
+	else
+		filename = ("audio/yellowwins.wav");
 	PlaySound(TEXT(filename), NULL, SND_ALIAS | SND_APPLICATION);
 }
 
@@ -29,7 +51,5 @@ void Voice::visionError() {
 
 void Voice::promptMove(int player) {
 	text.promptMove(player);
-	const char *filename = ("audio/player" + std::to_string(player) + ".wav").c_str();
-	PlaySound(TEXT(filename), NULL, SND_ALIAS | SND_APPLICATION);
-	PlaySound(TEXT("audio/promptmove.wav"), NULL, SND_ALIAS | SND_APPLICATION);
+	PlaySound(TEXT("audio/promptmove.wav"), NULL, SND_ALIAS | SND_APPLICATION | SND_ASYNC);
 }

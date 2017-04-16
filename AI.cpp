@@ -20,50 +20,31 @@ bool AI::setDifficulty(int difficulty) {
 }
 
 Move AI::makeMove(GameState gameState, int player) {
-	double *availableColumns = getOptions(gameState);
-	int col;
-	do {
-		col = rand() % 7;
-	} while (availableColumns[col] != 3);
-	return Move(player, col);
-	//TODO getOptions and make a moveconsidering the options
-	/*
-		simple offensive AI:
-		always pick the position with the most 1's surrounding it.
-
-		makes no attempt at stopping the player from completing a connect 4
-
-		simple defensive AI:
-		always pick the next empty spot in a column with two or more "exposed" 2's,
-		or position in a row with two or more "exposed" 2's, excluding positions in
-		columns 1 and 7.
-
-		has no defense against diagonal connects.
-		does not make offensive moves, thus bound to lose.
-
-		whimsical simple AI:
-		randomly chooses either a simple defensive or simple offensive move.
-
-		effectiveness unknown.
-
-		complex AI: ???read a tutorial???
-	*/
-
+	// double *availableColumns = getOptions(gameState);
+	bool firstMove = true;
+	for (int i = 0; i < COLUMN_COUNT_2; ++i) {
+		if (gameState.board[ROW_COUNT_2-1][i] != 0)
+			firstMove = false;
+	}
+	if (firstMove)
+		return Move(player, 3);
+	else {
+		int strategy = rand() % 2;
+		switch (strategy) {
+			case 0: return Move(player, dangerSpot(gameState));
+			case 1: return Move(player, decisiveAI(gameState));
+		}
+	}
+	return Move(player, rand()%7);
 }
 
 double* AI::getOptions(GameState gameState) {
 	double *options = new double[7];
-	int taken = 0;
 	for (int i = 0; i < COLUMN_COUNT_2; ++i) {
-		for (int j = 0; j < ROW_COUNT_2; ++j) {
-			if (gameState.board[j][i] != 0)
-				taken++;
-		}
-		if (taken < ROW_COUNT_2)
-			options[i] = 3; //a 3 denotes an available column...for now
+		if (gameState.board[0][i] == 0)
+			options[i] = 3; //a 3 denotes an available columns
 		else
 			options[i] = 0;
-		taken = 0;
 	}
 	return options;
 }
@@ -146,4 +127,60 @@ int AI::dangerSpot(GameState rows) {
         }
     }
 	return dangerCol;
+}
+
+// TODO: It doesnt check diagonals, but that will be trivial to implement.
+int AI::decisiveAI(GameState rows) { // 0 is nothing, 1 is AI, 2 is player, red is AI, yellow is player
+	int randCol = rand() % 8;   // The AI chooses a random column (0-7) if the player is not about to win. Or if the AI is not about to win.
+
+
+	// This will make the AI choose a column which is about to be taken by the player (IE, the player has three pieces in a vertical column already)
+	for (int row = 6; row >= 3; row--)
+	{
+		for (int col = 0; col <= 7; col++)
+		{
+			if (rows.board[row][col] == 2 && rows.board[row - 1][col] == 2 && rows.board[row - 2][col] == 2 && rows.board[row - 3][col] == 0)
+			{
+				return col;
+			}
+		}
+	}
+	// This will make the AI choose a column it is about to win vertically. (IE the AI has three pieces in a vertical column already)
+	for (int row = 6; row >= 3; row--)
+	{
+		for (int col = 0; col <= 7; col++)
+		{
+			if (rows.board[row][col] == 1 && rows.board[row - 1][col] == 1 && rows.board[row - 2][col] == 1 && rows.board[row - 3][col] == 0)
+			{
+				return col;
+			}
+		}
+	}
+
+	// This will make the AI choose a column which the player is about to win horizontally. (IE the player has three pieces in a horizontal row already)
+	for (int col = 7; col >= 3; col--)
+	{
+		for (int row = 6; row >= 0; row--)
+		{
+			if (rows.board[row][col] == 2 && rows.board[row][col - 1] == 2 && rows.board[row][col - 2] == 2 && rows.board[row][col - 3] == 0)
+			{
+				return (col - 3);
+			}
+		}
+	}
+
+	// This will make the AI choose a column which the AI is about to win horizontally. (IE the AI has three pieces in a horizontal row already)
+	for (int col = 7; col >= 3; col--)
+	{
+		for (int row = 6; row >= 0; row--)
+		{
+			if (rows.board[row][col] == 1 && rows.board[row][col - 1] == 1 && rows.board[row][col - 2] == 1 && rows.board[row][col - 3] == 0)
+			{
+				return (col - 3);
+			}
+		}
+	}
+
+	return randCol;
+
 }
