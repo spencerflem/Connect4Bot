@@ -31,7 +31,6 @@ Move AI::makeMove(GameState gameState, int player) {
 	else {
 		int strategy = rand() % 2;
 		switch (strategy) {
-<<<<<<< HEAD
 			case 0: {
 				double *availableColumns = getOptions(gameState);
 				int col = dangerSpot(gameState);
@@ -47,24 +46,7 @@ Move AI::makeMove(GameState gameState, int player) {
 				}
 			}
 				break;
-			case 1: return Move(player, decisiveAI(gameState));
-=======
-		case 0: {
-			double *availableColumns = getOptions(gameState);
-			int col = dangerSpot(gameState);
-			if (col == -1) {
-				do {
-					col = rand() % 7;
-				} while (availableColumns[col] != 3);
-				delete availableColumns;
-				return Move(player, col);
-			}
-			else {
-				return Move(player, col);
-			}
-		}
-		case 1: return Move(player, thomasAI(gameState));
->>>>>>> origin/master
+			case 1: return Move(player, thomasAI(gameState));
 		}
 	}
 	return Move(player, rand()%7);
@@ -175,7 +157,7 @@ int AI::thomasAI(GameState rows) { // 0 is nothing, 1 is AI, 2 is player, red is
 
 	// ********************************
 	// OFFENSIVES ACTIONS  GO UNDER HERE
-	// 
+	//
 
 	// OFFENSIVE DIAGONAL MOVES GO UNDER HERE *************
 
@@ -421,10 +403,10 @@ int AI::thomasAI(GameState rows) { // 0 is nothing, 1 is AI, 2 is player, red is
 
 	// ********************************
 	// DEFENSIVE ACTIONS GO UNDER HERE
-	// 
+	//
 
 
-	// CASE 6: AI Protect Vertically 
+	// CASE 6: AI Protect Vertically
 	for (int row = 5; row >= 3; row--)
 	{
 		for (int col = 0; col <= 6; col++)
@@ -477,7 +459,7 @@ int AI::thomasAI(GameState rows) { // 0 is nothing, 1 is AI, 2 is player, red is
 		}
 	}
 
-	// CASE 9: AI winning horizontally within , right to left x.x._.x :: 
+	// CASE 9: AI winning horizontally within , right to left x.x._.x ::
 	for (int col = 6; col >= 3; col--)
 	{
 		for (int row = 5; row >= 0; row--)
@@ -497,7 +479,7 @@ int AI::thomasAI(GameState rows) { // 0 is nothing, 1 is AI, 2 is player, red is
 		}
 	}
 
-	// CASE 10: AI protects horizontally within , right to left x.x.x._  :: 
+	// CASE 10: AI protects horizontally within , right to left x.x.x._  ::
 	for (int col = 6; col >= 3; col--)
 	{
 		for (int row = 5; row >= 0; row--)
