@@ -104,16 +104,45 @@ int AI::dangerSpot(GameState rows) {
 						return j;
 					}
                 }
-            }
-            /*//Check diagonal for win condition
-            if(j<=3) {
-                if(diagLDR[i+3][j]!=0 && (diagLDR[i+3][j]==diagLDR[i+3][j+1] && diagLDR[i+3][j]==diagLDR[i+3][j+2])) {
-
-                }
-                if(diagRDL[i+3][j]!=0 && (diagRDL[i+3][j]==diagRDL[i+3][j+1] && diagRDL[i+3][j]==diagRDL[i+3][j+2])) {
-
-                }
-            }*/
+				//Only check necessary positions for LDR condition
+	            if(j<=(COLUMN_COUNT_2-3) && i<=(ROW_COUNT_2-3) && !(i==0 && j==4) && !(i==3 && j==0)) {
+					//Check diagonal LDR for 3 in a diagonal condition
+	                if(rows.board[i][j]==rows.board[i+1][j+1] && rows.board[i][j]==rows.board[i+2][j+2]) {
+						//Check to see if left/up spot is dangerous
+						if((i!=0 && j!=0) && rows.board[i-1][j-1]==0 && rows.board[i][j-1]!=0) {
+							return j-1;
+						}
+						//Check to see if right/down spot is dangerous
+						if((i!=3 && j!=4) && rows.board[i+3][j+3]==0) {
+							if(i==2) {
+								return j+3;
+							}
+							else if(rows.board[i+4][j+3]==0) {
+								return j+3;
+							}
+						}
+	                }
+				}
+				//Only check necessary positions for RDL condition
+				if(j>=(COLUMN_COUNT_2-5) && i<=(ROW_COUNT_2-3) && !(i==0 && j==2) && !(i==3 && j==ROW_COUNT_2-1)) {
+					//Check diagonal LDR for 3 in a diagonal condition
+	                if(rows.board[i][j]==rows.board[i+1][j-1] && rows.board[i][j]==rows.board[i+2][j-2]) {
+						//Check to see if right/up spot is dangerous
+						if((i!=0 && j!=ROW_COUNT_2-1) && rows.board[i-1][j+1]==0 && rows.board[i][j+1]!=0) {
+							return j+1;
+						}
+						//Check to see if left/down spot is dangerous
+						if((i!=3 && j!=2) && rows.board[i+3][j-3]==0) {
+							if(i==2) {
+								return j-3;
+							}
+							else if(rows.board[i+4][j-3]==0) {
+								return j-3;
+							}
+						}
+	                }
+				}
+			}
         }
     }
 	return dangerCol;
