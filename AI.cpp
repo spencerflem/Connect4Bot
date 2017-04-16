@@ -30,9 +30,12 @@ Move AI::makeMove(GameState gameState, int player) {
 		return Move(player, 3);
 	else {
 		int strategy = rand() % 2;
+		int col;
+		double *availableColumns;
 		switch (strategy) {
-			case 0: double *availableColumns = getOptions(gameState);
-				int col = dangerSpot(gameState);
+			case 0: 
+				availableColumns = getOptions(gameState);
+				col = dangerSpot(gameState);
 				if(col == -1) {
 					do {
 						col = rand() % 7;
