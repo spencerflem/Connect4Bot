@@ -31,20 +31,21 @@ Move AI::makeMove(GameState gameState, int player) {
 	else {
 		int strategy = rand() % 2;
 		switch (strategy) {
-			case 0: double *availableColumns = getOptions(gameState);
-				int col = dangerSpot(gameState);
-				if(col == -1) {
-					do {
-						col = rand() % 7;
-					} while (availableColumns[col] != 3);
-					delete availableColumns;
-					return Move(player, col);
-				}
-				else {
-					return Move(player, col);
-				}
-				break;
-			case 1: return Move(player, decisiveAI(gameState));
+		case 0: {
+			double *availableColumns = getOptions(gameState);
+			int col = dangerSpot(gameState);
+			if (col == -1) {
+				do {
+					col = rand() % 7;
+				} while (availableColumns[col] != 3);
+				delete availableColumns;
+				return Move(player, col);
+			}
+			else {
+				return Move(player, col);
+			}
+		}
+		case 1: return Move(player, decisiveAI(gameState));
 		}
 	}
 	return Move(player, rand()%7);
