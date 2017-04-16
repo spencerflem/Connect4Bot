@@ -12,7 +12,7 @@ private:
 	int difficulty;
 	double* getOptions(GameState gameState);
 	int dangerSpot(GameState rows);
-	int decisiveAI(GameState rows);
+	int thomasAI(GameState rows);
 public:
 	AI(int difficulty);
 	int getDifficulty();
