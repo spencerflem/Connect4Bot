@@ -3,19 +3,39 @@
 
 #include "Input.h"
 #include "Move.h"
+#include "GameState.h"
 #include <opencv2/opencv.hpp>
 #include <vector>
 #include <cmath>
+#include <algorithm>
+
+#ifdef VOICE
+#include "Voice.h"
+#else
+#include "Text.h"
+#endif
+
 
 class Vision: public Input {
+private:
+	struct Piece {
+		cv::Point point;
+		int player;
+	};
+	void showImg(cv::Mat frame, std::string name);
+	bool tryGetGameState(cv::Mat origFrame, GameState &gameState);
+	Move findMoveDifference(GameState origState, GameState currentState);
+	void thresholdFrame(cv::Mat frame, cv::Mat threshs[3]);
+	void appendPieces(cv::Mat thresh, std::vector<Piece> &pieces, int player);
+	#ifdef VOICE
+		Voice output = Voice();
+	#else
+		Text output = Text();
+	#endif
 public:
 	Vision();
-	Move getMove(int player);
+	Move getMove(GameState origState, int player);
 	//Returns moves made using a webcam
-private:
-	void showImg(cv::Mat frame, std::string name);
-	cv::Mat threshByColor(cv::Mat frame, cv::Scalar lowRange, cv::Scalar highRange);
-	cv::Mat findBoard(cv::Mat origFrame);
 };
 
 #endif
