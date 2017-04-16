@@ -12,7 +12,7 @@ Game::Game() {
         }
     }
     for(int i=0; i<DIAGONAL_COUNT; ++i) {
-        for(int j=0; j<DIAGONAL_COUNT; ++j) {
+        for(int j=0; j<DIAGONAL_LENGTH; ++j) {
             diagLDR[i][j] = 0;
             diagRDL[i][j] = 0;
         }
