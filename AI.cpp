@@ -126,6 +126,11 @@ int AI::dangerSpot(GameState rows) {
 			}
         }
     }
+	double *availableColumns = getOptions(gameState);
+	do {
+		dangerCol = rand() % 7;
+	} while (availableColumns[dangerCol] != 3);
+	delete availableColumns
 	return dangerCol;
 }
 
