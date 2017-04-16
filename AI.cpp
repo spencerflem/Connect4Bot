@@ -53,17 +53,11 @@ Move AI::makeMove(GameState gameState, int player) {
 
 double* AI::getOptions(GameState gameState) {
 	double *options = new double[7];
-	int taken = 0;
 	for (int i = 0; i < COLUMN_COUNT_2; ++i) {
-		for (int j = 0; j < ROW_COUNT_2; ++j) {
-			if (gameState.board[j][i] != 0)
-				taken++;
-		}
-		if (taken < ROW_COUNT_2)
+		if (gameState.board[0][i] == 0)
 			options[i] = 3; //a 3 denotes an available column...for now
 		else
 			options[i] = 0;
-		taken = 0;
 	}
 	return options;
 }
