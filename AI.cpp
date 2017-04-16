@@ -20,7 +20,7 @@ bool AI::setDifficulty(int difficulty) {
 }
 
 Move AI::makeMove(GameState gameState, int player) {
-	double *availableColumns = getOptions(gameState);
+	// double *availableColumns = getOptions(gameState);
 	bool firstMove = true;
 	for (int i = 0; i < COLUMN_COUNT_2; ++i) {
 		if (gameState.board[ROW_COUNT_2-1][i] != 0)
@@ -42,7 +42,7 @@ double* AI::getOptions(GameState gameState) {
 	double *options = new double[7];
 	for (int i = 0; i < COLUMN_COUNT_2; ++i) {
 		if (gameState.board[0][i] == 0)
-			options[i] = 3; //a 3 denotes an available column...for now
+			options[i] = 3; //a 3 denotes an available columns
 		else
 			options[i] = 0;
 	}
@@ -182,4 +182,5 @@ int AI::decisiveAI(GameState rows) { // 0 is nothing, 1 is AI, 2 is player, red 
 	}
 
 	return randCol;
+
 }

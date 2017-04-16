@@ -392,11 +392,3 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
-
-
-###### REMOVE EVEN MORE VISUAL STUDIO
-*.sln
-*.db
-*.opendb
-*.vcxproj
-*.vcxproj.filters

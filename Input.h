@@ -2,10 +2,11 @@
 #define INPUT_H
 
 #include "Move.h"
+#include "GameState.h"
 
 class Input {
 public:
-	virtual Move getMove(int players) = 0;
+	virtual Move getMove(GameState gameState, int players) = 0;
 };
 
 #endif

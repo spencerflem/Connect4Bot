@@ -19,20 +19,9 @@ Game::Game() {
     }
 }
 
-void Game::printBoard() {
-    std::cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << std::endl;
-    for(int i=0; i<ROW_COUNT; ++i) {
-        for(int j=0; j<COLUMN_COUNT; ++j) {
-            std::cout << "|   " << rows[i][j] << "   ";
-        }
-        std::cout << "|" << std::endl;
-        std::cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << std::endl;
-    }
-}
-
 bool Game::takeTurn(Move turn) {
 	if(turn.column < 0 || turn.column >= COLUMN_COUNT) {
-		std::cout << "Error: Illegal Move" << std::endl;
+		output.badMove();
         return false;
 	}
     int pos = -1;
@@ -43,7 +32,7 @@ bool Game::takeTurn(Move turn) {
         pos++;
     }
     if(pos==-1) {
-        std::cout << "Error: Column full" << std::endl;
+		output.badMove();
         return false;
     }
     columns[turn.column][pos] = turn.player;

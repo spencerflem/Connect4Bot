@@ -1,17 +1,14 @@
-#ifndef VOICE_H
-#define VOICE_H
+#ifndef TEXT_H
+#define TEXT_H
 
-#include "Text.h"
 #include "Output.h"
 #include "GameState.h"
-#include <windows.h>
-#include <mmsystem.h>
+#include <string>
+#include <iostream>
 
-class Voice : public Output {
-private:
-	Text text = Text();
+class Text: public Output {
 public:
-	Voice() {}
+	Text() {}
 	void printBoard(GameState gameState);
 	void badMove();
 	void requestMove(int column);
