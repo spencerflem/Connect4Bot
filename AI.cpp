@@ -123,6 +123,49 @@ int AI::dangerSpot(GameState rows) {
 						}
 	                }
 				}
+				//Check for danger spots in holes in rows
+				if(j<=(COLUMN_COUNT_2-4)) {
+					//Check for 2 in a row followed by open then occupied spot in format xx_x
+					if(rows.board[i][j]==rows.board[i][j+1] && rows.board[i][j+2]==0 && rows.board[i][j]==rows.board[i][j+3]) {
+						if(i==ROW_COUNT_2-1) {
+							return j+2;
+						}
+						else if(rows.board[i+1][j+2] !=0 ) {
+                    		return j+2;
+						}
+					}
+					//Check for 2 in a row followed by open then occupied spot in format x_xx
+					if(rows.board[i][j]==rows.board[i][j+2] && rows.board[i][j+1]==0 && rows.board[i][j]==rows.board[i][j+3]) {
+						if(i==ROW_COUNT_2-1) {
+							return j+1;
+						}
+						else if(rows.board[i+1][j+1] !=0 ) {
+                    		return j+1;
+						}
+					}
+                }
+				//Check for danger spots in holes in diagonals LDR
+				if(i<ROW_COUNT_2-3 && j<COLUMN_COUNT_2-3) {
+					//Check for xx_x holes
+					if(rows.board[i][j]==rows.board[i+1][j+1] && rows.board[i+2][j+2]==0 && rows.board[i][j]==rows.board[i+3][j+3] && rows.board[i+3][j+2]!=0) {
+						return j+2;
+					}
+					//Check for x_xx holes
+					if(rows.board[i][j]==rows.board[i+2][j+2] && rows.board[i+1][j+1]==0 && rows.board[i][j]==rows.board[i+3][j+3] && rows.board[i+2][j+1]!=0) {
+						return j+1;
+					}
+				}
+				//Check for danger spots in holes in diagonals RDL
+				if(i<ROW_COUNT_2-3 && j>COLUMN_COUNT_2-5) {
+					//Check for xx_x holes
+					if(rows.board[i][j]==rows.board[i+1][j-1] && rows.board[i+2][j-2]==0 && rows.board[i][j]==rows.board[i+3][j-3] && rows.board[i+3][j-2]!=0) {
+						return j-2;
+					}
+					//Check for x_xx holes
+					if(rows.board[i][j]==rows.board[i+2][j-2] && rows.board[i+1][j-1]==0 && rows.board[i][j]==rows.board[i+3][j-3] && rows.board[i+2][j-1]!=0) {
+						return j-1;
+					}
+				}
 			}
         }
     }
