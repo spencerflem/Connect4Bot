@@ -740,7 +740,7 @@ int AI::thomasAI(GameState rows) { // 0 is nothing, 1 is AI, 2 is player, red is
 
 		}
 	}
-	if(loopDepth>=10) {
+	if(loopDepth>=30) {
 		return randCol;
 	}
 	GameState miniMax(rows);
