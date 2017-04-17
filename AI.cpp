@@ -19,6 +19,7 @@ bool AI::setDifficulty(int difficulty) {
 }
 
 Move AI::makeMove(GameState gameState, int player) {
+	//loop scans board and if the board is empty, the AI makes the first move in the middle column
 	bool firstMove = true;
 	loopDepth=0;
 	for (int i = 0; i < COLUMN_COUNT_2; ++i) {
@@ -27,10 +28,13 @@ Move AI::makeMove(GameState gameState, int player) {
 	}
 	if (firstMove)
 		return Move(player, 3);
+	
+	//if the game has already begun, the AI prioritizes checking "danger spots" where a potential connect 4 is imminent
 	else {
 		int col = dangerSpot(gameState);
 		if(col != -99)
 			return Move(player, std::abs(col)-1);
+	//if no imminent threats are found, the AI scans the board to make strategic, or random, moves
 		else
 			return Move(player, thomasAI(gameState));
 	}
