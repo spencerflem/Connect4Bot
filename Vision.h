@@ -22,6 +22,7 @@ private:
 		cv::Point point;
 		int player;
 	};
+	cv::VideoCapture capture;
 	void showImg(cv::Mat frame, std::string name);
 	bool tryGetGameState(cv::Mat origFrame, GameState &gameState);
 	Move findMoveDifference(GameState origState, GameState currentState);
