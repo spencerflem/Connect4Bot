@@ -21,6 +21,7 @@ bool AI::setDifficulty(int difficulty) {
 
 Move AI::makeMove(GameState gameState, int player) {
 	bool firstMove = true;
+	loopDepth=0;
 	for (int i = 0; i < COLUMN_COUNT_2; ++i) {
 		if (gameState.board[ROW_COUNT_2-1][i] != 0)
 			firstMove = false;
@@ -30,8 +31,8 @@ Move AI::makeMove(GameState gameState, int player) {
 	else {
 		// double *availableColumns = getOptions(gameState);
 		int col = dangerSpot(gameState);
-		if(col != -1)
-			return Move(player, col);
+		if(col != -99)
+			return Move(player, std::abs(col)-1);
 		else
 			return Move(player, thomasAI(gameState));
 	}
@@ -48,10 +49,10 @@ double* AI::getOptions(GameState gameState) {
 	}
 	return options;
 }
-
+//If return is negative then the AI would win, positive beifits player
 int AI::dangerSpot(GameState rows) {
 	//This will return the column that the AI must play in to avoid a loss on the next turn.
-	int dangerCol = -1;
+	int dangerCol = -99;
 	for(int i=0; i<ROW_COUNT_2; ++i) {
         for(int j=0; j<COLUMN_COUNT_2; ++j) {
             if(rows.board[i][j] != 0) {
@@ -61,20 +62,32 @@ int AI::dangerSpot(GameState rows) {
 					if(j!=0 && rows.board[i][j-1]==0) {
 						//Check to see if the left side of the 3 in a row is a playable spot.
 						if(i==ROW_COUNT_2-1) {
-							return j-1;
+							if(rows.board[i][j]==1) {
+								return (-1) * ((j+1)-1);
+							}
+							return (j+1)-1;
 						}
 						else if(rows.board[i+1][j-1] != 0) {
-							return j-1;
+							if(rows.board[i][j]==1) {
+								return (-1) * ((j+1)-1);
+							}
+							return (j+1)-1;
 						}
 					}
 					//Check to see if the 3 in a row lies on the board's right border and is empty
 					if(j!=COLUMN_COUNT_2-1 && rows.board[i][j+1]==0) {
 						//Check to see if the right side of the 3 in a row is a playable spot.
 						if(i==ROW_COUNT_2-1) {
-							return j+1;
+							if(rows.board[i][j]==1) {
+								return (-1) * ((j+1)+1);
+							}
+							return (j+1)+1;
 						}
 						else if(rows.board[i+1][j+1] != 0) {
-							return j+1;
+							if(rows.board[i][j]==1) {
+								return (-1) * ((j+1)+1);
+							}
+							return (j+1)+1;
 						}
 					}
                 }
@@ -82,7 +95,10 @@ int AI::dangerSpot(GameState rows) {
                 if(i<=(ROW_COUNT_2-3) && (rows.board[i][j]==rows.board[i+1][j] && rows.board[i][j]==rows.board[i+2][j])) {
 					//Check to see if the 3 in a column lies below the board's top edge and if the space above is empty
 					if(i!=0 && rows.board[i-1][j]==0) {
-						return j;
+						if(rows.board[i][j]==1) {
+							return (-1) * ((j+1));
+						}
+						return (j+1);
 					}
                 }
 				//Only check necessary positions for LDR condition
@@ -91,15 +107,24 @@ int AI::dangerSpot(GameState rows) {
 	                if(rows.board[i][j]==rows.board[i+1][j+1] && rows.board[i][j]==rows.board[i+2][j+2]) {
 						//Check to see if left/up spot is dangerous
 						if((i!=0 && j!=0) && rows.board[i-1][j-1]==0 && rows.board[i][j-1]!=0) {
-							return j-1;
+							if(rows.board[i][j]==1) {
+								return (-1) * ((j+1)-1);
+							}
+							return (j+1)-1;
 						}
 						//Check to see if right/down spot is dangerous
 						if((i!=3 && j!=4) && rows.board[i+3][j+3]==0) {
 							if(i==2) {
-								return j+3;
+								if(rows.board[i][j]==1) {
+									return (-1) * ((j+1)+3);
+								}
+								return (j+1)+3;
 							}
 							else if(rows.board[i+4][j+3]==0) {
-								return j+3;
+								if(rows.board[i][j]==1) {
+									return (-1) * ((j+1)+3);
+								}
+								return (j+1)+3;
 							}
 						}
 	                }
@@ -110,15 +135,24 @@ int AI::dangerSpot(GameState rows) {
 	                if(rows.board[i][j]==rows.board[i+1][j-1] && rows.board[i][j]==rows.board[i+2][j-2]) {
 						//Check to see if right/up spot is dangerous
 						if((i!=0 && j!=ROW_COUNT_2-1) && rows.board[i-1][j+1]==0 && rows.board[i][j+1]!=0) {
-							return j+1;
+							if(rows.board[i][j]==1) {
+								return (-1) * ((j+1)+1);
+							}
+							return (j+1)+1;
 						}
 						//Check to see if left/down spot is dangerous
 						if((i!=3 && j!=2) && rows.board[i+3][j-3]==0) {
 							if(i==2) {
-								return j-3;
+								if(rows.board[i][j]==1) {
+									return (-1) * ((j+1)-3);
+								}
+								return (j+1)-3;
 							}
 							else if(rows.board[i+4][j-3]==0) {
-								return j-3;
+								if(rows.board[i][j]==1) {
+									return (-1) * ((j+1)-3);
+								}
+								return (j+1)-3;
 							}
 						}
 	                }
@@ -128,19 +162,31 @@ int AI::dangerSpot(GameState rows) {
 					//Check for 2 in a row followed by open then occupied spot in format xx_x
 					if(rows.board[i][j]==rows.board[i][j+1] && rows.board[i][j+2]==0 && rows.board[i][j]==rows.board[i][j+3]) {
 						if(i==ROW_COUNT_2-1) {
-							return j+2;
+							if(rows.board[i][j]==1) {
+								return (-1) * ((j+1)+2);
+							}
+							return (j+1)+2;
 						}
 						else if(rows.board[i+1][j+2] !=0 ) {
-                    		return j+2;
+							if(rows.board[i][j]==1) {
+								return (-1) * ((j+1)+2);
+							}
+                    		return (j+1)+2;
 						}
 					}
 					//Check for 2 in a row followed by open then occupied spot in format x_xx
 					if(rows.board[i][j]==rows.board[i][j+2] && rows.board[i][j+1]==0 && rows.board[i][j]==rows.board[i][j+3]) {
 						if(i==ROW_COUNT_2-1) {
-							return j+1;
+							if(rows.board[i][j]==1) {
+								return (-1) * ((j+1)+1);
+							}
+							return (j+1)+1;
 						}
 						else if(rows.board[i+1][j+1] !=0 ) {
-                    		return j+1;
+							if(rows.board[i][j]==1) {
+								return (-1) * ((j+1)+1);
+							}
+                    		return (j+1)+1;
 						}
 					}
                 }
@@ -148,22 +194,34 @@ int AI::dangerSpot(GameState rows) {
 				if(i<ROW_COUNT_2-3 && j<COLUMN_COUNT_2-3) {
 					//Check for xx_x holes
 					if(rows.board[i][j]==rows.board[i+1][j+1] && rows.board[i+2][j+2]==0 && rows.board[i][j]==rows.board[i+3][j+3] && rows.board[i+3][j+2]!=0) {
-						return j+2;
+						if(rows.board[i][j]==1) {
+							return (-1) * ((j+1)+2);
+						}
+						return (j+1)+2;
 					}
 					//Check for x_xx holes
 					if(rows.board[i][j]==rows.board[i+2][j+2] && rows.board[i+1][j+1]==0 && rows.board[i][j]==rows.board[i+3][j+3] && rows.board[i+2][j+1]!=0) {
-						return j+1;
+						if(rows.board[i][j]==1) {
+							return (-1) * ((j+1)+1);
+						}
+						return (j+1)+1;
 					}
 				}
 				//Check for danger spots in holes in diagonals RDL
 				if(i<ROW_COUNT_2-3 && j>COLUMN_COUNT_2-5) {
 					//Check for xx_x holes
 					if(rows.board[i][j]==rows.board[i+1][j-1] && rows.board[i+2][j-2]==0 && rows.board[i][j]==rows.board[i+3][j-3] && rows.board[i+3][j-2]!=0) {
-						return j-2;
+						if(rows.board[i][j]==1) {
+							return (-1) * ((j+1)-2);
+						}
+						return (j+1)-2;
 					}
 					//Check for x_xx holes
 					if(rows.board[i][j]==rows.board[i+2][j-2] && rows.board[i+1][j-1]==0 && rows.board[i][j]==rows.board[i+3][j-3] && rows.board[i+2][j-1]!=0) {
-						return j-1;
+						if(rows.board[i][j]==1) {
+							return (-1) * ((j+1)-1);
+						}
+						return (j+1)-1;
 					}
 				}
 			}
@@ -171,7 +229,7 @@ int AI::dangerSpot(GameState rows) {
     }
 	return dangerCol;
 }
-static int loopDepth=0;
+
 int AI::thomasAI(GameState rows) { // 0 is nothing, 1 is AI, 2 is player, red is AI, yellow is player
 
 	// The AI chooses a random column (1-7) if the player is not about to win. Or if the AI is not about to win.
@@ -672,13 +730,18 @@ int AI::thomasAI(GameState rows) { // 0 is nothing, 1 is AI, 2 is player, red is
 
 		}
 	}
-
-	Gamestate miniMax();
-	miniMax.board=rows.board;
-	int depth=0;
-	while(miniMax.board[y][x]) {
-		;
+	if(loopDepth>=10) {
+		return randCol;
 	}
-	miniMax.board[][randCow] = 1;
+	GameState miniMax(rows);
+	int depth=0;
+	while(miniMax.board[depth][randCol]==0) {
+		depth++;
+	}
+	miniMax.board[depth-1][randCol] = 1;
+	if(dangerSpot(miniMax)>0) {
+		loopDepth++;
+		thomasAI(rows);
+	}
 	return randCol;
 }
