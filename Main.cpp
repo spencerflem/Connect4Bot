@@ -30,6 +30,7 @@ const bool voice = false;
 
 int main(int argc, char *argv[])
 {
+    /*
     srand ( time(NULL) );
     int finished = false;
     Move turn;
@@ -78,12 +79,13 @@ int main(int argc, char *argv[])
     }
     output.printBoard(game.getGameState());
 	output.announceWinner(finished);
-
+    */
     //Test Time baby!!!!
     GameState tester;
-    tester.board[6][5] = 1;
-    AI ricardo = AI(0);
-    int alpha = ricardo.dangerSpot(tester);
-    std::cout << alpha;
+    AI jimmy = AI(0);
+    for(int i=0 i<20; i++) {
+        int alpha = jimmy.thomasAI(tester);
+        std::cout << alpha << endl;
+    }
     return 0;
 }
