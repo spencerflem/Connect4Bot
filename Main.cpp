@@ -22,24 +22,22 @@ const bool voice = true;
 const bool voice = false;
 #endif
 
-//using namespace std;
-
 int main(int argc, char *argv [])
 {
 	srand(time(NULL));
 	int finished = false;
 	Move turn;
 	Game game;
-#ifdef VISION
-	Vision input = Vision();
-#else
-	Human input = Human();
-#endif
-#ifdef VOICE
-	Voice output = Voice();
-#else
-	Text output = Text();
-#endif
+	#ifdef VISION
+		Vision input = Vision();
+	#else
+		Human input = Human();
+	#endif
+	#ifdef VOICE
+		Voice output = Voice();
+	#else
+		Text output = Text();
+	#endif
 	AI ai = AI(0);
 	int player = 1;
 	while (!finished) {
@@ -74,5 +72,6 @@ int main(int argc, char *argv [])
 	}
 	output.printBoard(game.getGameState());
 	output.announceWinner(finished);
+
 	return 0;
 }

@@ -15,7 +15,7 @@ private:
 	double* getOptions(GameState gameState);
 	int loopDepth=0;
 	int thomasAI(GameState rows);
-	int dangerSpot(GameState rows);
+	int dangerSpot(GameState rows, bool future=false);
 public:
 	AI(int difficulty);
 	int getDifficulty();
