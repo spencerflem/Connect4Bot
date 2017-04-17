@@ -39,8 +39,11 @@ void Voice::announceWinner(int player) {
 	const char *filename;
 	if (player == 1)
 		filename = ("audio/redwins.wav");
-	else
+	else if(player == 2)
 		filename = ("audio/yellowwins.wav");
+	else {
+		filename = ("audio/stalemate.wav");
+	}
 	PlaySound(TEXT(filename), NULL, SND_ALIAS | SND_APPLICATION);
 }
 
