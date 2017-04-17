@@ -6,10 +6,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-//testing
-#include "GameState.h"
-#include <iostream>
-
 #ifdef VISION
 #include "Vision.h"
 const bool vision = true;
@@ -28,26 +24,25 @@ const bool voice = false;
 
 //using namespace std;
 
-int main(int argc, char *argv[])
+int main(int argc, char *argv [])
 {
-    /*
-    srand ( time(NULL) );
-    int finished = false;
-    Move turn;
-    Game game;
-	#ifdef VISION
+	srand(time(NULL));
+	int finished = false;
+	Move turn;
+	Game game;
+#ifdef VISION
 	Vision input = Vision();
-	#else
+#else
 	Human input = Human();
-	#endif
-	#ifdef VOICE
+#endif
+#ifdef VOICE
 	Voice output = Voice();
-	#else
+#else
 	Text output = Text();
-	#endif
+#endif
 	AI ai = AI(0);
-    int player = 1;
-    while(!finished) {
+	int player = 1;
+	while (!finished) {
 		if (player == 1) {
 			turn = ai.makeMove(game.getGameState(), player);
 			if (vision) {
@@ -66,26 +61,18 @@ int main(int argc, char *argv[])
 				return -1; //more graceful way?
 			}
 		}
-        if (game.takeTurn(turn)) {
-			if(player==1) {
-                player++;
-                output.printBoard(game.getGameState());
-            }
-            else{
-                player--;
-            }
+		if (game.takeTurn(turn)) {
+			if (player == 1) {
+				player++;
+				output.printBoard(game.getGameState());
+			}
+			else {
+				player--;
+			}
 		}
-        finished = game.isWin();
-    }
-    output.printBoard(game.getGameState());
+		finished = game.isWin();
+	}
+	output.printBoard(game.getGameState());
 	output.announceWinner(finished);
-    */
-    //Test Time baby!!!!
-    GameState tester;
-    AI jimmy = AI(0);
-    for(int i=0 i<20; i++) {
-        int alpha = jimmy.thomasAI(tester);
-        std::cout << alpha << endl;
-    }
-    return 0;
+	return 0;
 }
