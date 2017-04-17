@@ -28,7 +28,6 @@ Move AI::makeMove(GameState gameState, int player) {
 	if (firstMove)
 		return Move(player, 3);
 	else {
-		// double *availableColumns = getOptions(gameState);
 		int col = dangerSpot(gameState);
 		if(col != -99)
 			return Move(player, std::abs(col)-1);
