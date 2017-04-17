@@ -55,9 +55,11 @@ bool Game::takeTurn(Move turn) {
 }
 
 int Game::isWin() {
+    int posCounter=0;
     for(int i=0; i<ROW_COUNT; ++i) {
         for(int j=0; j<COLUMN_COUNT; ++j) {
             if(rows[i][j] != 0) {
+                posCounter++;
                 //Check row? for win condition
                 if(j<=(COLUMN_COUNT-4) && (rows[i][j]==rows[i][j+1] && rows[i][j]==rows[i][j+2] && rows[i][j]==rows[i][j+3])) {
                     return rows[i][j];
@@ -77,6 +79,9 @@ int Game::isWin() {
                 }
             }
         }
+    }
+    if(posCounter==42) {
+        return 3;
     }
     return 0;
 }

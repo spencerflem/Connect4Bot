@@ -23,7 +23,7 @@ class Game
         Game();
         //Makes a move and updates board
         bool takeTurn(Move turn);
-        //Checks to see if a player has won the game; Returns the winner's ID
+        //Checks to see if a player has won the game; Returns the winner's ID; returns 3 in event of draw
         int isWin();
         //Returns the current gameState
         GameState getGameState();
