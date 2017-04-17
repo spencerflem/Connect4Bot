@@ -12,7 +12,6 @@ Vision::Vision() {
 }
 
 Move Vision::getMove(GameState origState, int player) {
-	//if different on first 3 frames, FAIL!!!
 	GameState backTwo = origState, backOne = origState;
 	int frameCount = 0;
 	while (true) {
@@ -24,8 +23,11 @@ Move Vision::getMove(GameState origState, int player) {
 		cv::waitKey(10);
 		if (success) {
 			frameCount++;
+			//If the last three frames are the same it now counts
+			//This way it doesnt count moves as the peices are falling
 			if (currentState == backOne && currentState == backTwo) {
 				if (currentState != origState) {
+					//first 3 frames is before any player moves have been made
 					if (frameCount == 3) {
 						output.visionError();
 						throw "Board Mismatch";
@@ -48,14 +50,17 @@ void Vision::showImg(cv::Mat frame, std::string name) {
 }
 
 void Vision::thresholdFrame(cv::Mat origFrame, cv::Mat threshs[3]) {
+	//Thresholds the frame into 3 parts, Black (no peices), Red, and Yellow
 	cv::Mat frame, blackThresh, blueThresh, redThresh, otherRedThresh, yellowThresh, mask;
 	cv::resize(origFrame, frame, cv::Size(), 0.5, 0.5);
 	cv::GaussianBlur(frame, frame, cv::Size(15, 15), 2, 2);
 	cv::cvtColor(frame, frame, cv::COLOR_BGR2HSV);
+	//Numbers found experimentally
 	cv::inRange(frame, cv::Scalar(101, 75, 40), cv::Scalar(150, 255, 255), blueThresh);
 	cv::inRange(frame, cv::Scalar(151, 130, 40), cv::Scalar(255, 255, 255), redThresh);
 	cv::inRange(frame, cv::Scalar(0, 130, 40), cv::Scalar(20, 255, 255), otherRedThresh);
 	cv::inRange(frame, cv::Scalar(21, 130, 40), cv::Scalar(100, 255, 255), yellowThresh);
+	//Makes a mask by threshing for blue and filling in all the edges
 	blueThresh.copyTo(mask);
 	cv::floodFill(mask, cv::Point(0, 0), cv::Scalar(125));
 	cv::Scalar colour = mask.at<uchar>(cv::Point(frame.cols / 2, frame.rows - 1));
@@ -64,10 +69,12 @@ void Vision::thresholdFrame(cv::Mat origFrame, cv::Mat threshs[3]) {
 	cv::threshold(mask, mask, 150, 0, cv::THRESH_TOZERO_INV);
 	cv::threshold(mask, mask, 100, 255, cv::THRESH_BINARY_INV);
 	cv::bitwise_or(redThresh, otherRedThresh, redThresh);
+	//Only includes parts of the red, yellow thresh surrounded by blue
 	cv::bitwise_and(blueThresh, mask, blueThresh);
 	cv::bitwise_and(redThresh, mask, redThresh);
 	cv::bitwise_and(yellowThresh, mask, yellowThresh);
 
+	//Makes the black thresh by finding whats not blue yellow or red
 	cv::Mat combinedThresh(blueThresh.rows, blueThresh.cols, CV_8UC3);
 	cv::Mat in [] = { blueThresh, yellowThresh, redThresh };
 	int from_to [] = { 0,0, 1,1, 2,2 };
@@ -83,6 +90,7 @@ void Vision::thresholdFrame(cv::Mat origFrame, cv::Mat threshs[3]) {
 }
 
 void Vision::appendPieces(cv::Mat thresh, std::vector<Piece> &pieces, int player) {
+	//Takes a threshold, finds the contour centers, and appends it as a peice
 	cv::Mat canny;
 	std::vector<std::vector<cv::Point>> contours;
 	std::vector<cv::Vec4i> hierarchy;
@@ -109,7 +117,6 @@ bool Vision::tryGetGameState(cv::Mat origFrame, GameState &gameState) {
 	if (pieces.size() != 42)
 		return false;
 
-	//std::cout << std::endl;
 	std::sort(pieces.begin(), pieces.end(),
 		[](const Piece& piece1, const Piece& piece2) {
 			return (piece1.point.y < piece2.point.y);
@@ -123,12 +130,9 @@ bool Vision::tryGetGameState(cv::Mat origFrame, GameState &gameState) {
 			}
 		);
 		for (int j = 0; j < 7; j++) {
-			//std::cout << row.at(j).player << " ";
 			gameState.board[i][j] = row.at(j).player;
 		}
-		//std::cout << std::endl;
 	}
-	//std::cout << std::endl;
 
 	return true;
 }
