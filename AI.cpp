@@ -1,5 +1,4 @@
 #include "AI.h"
-#include <stdlib.h>
 
 AI::AI(int difficulty) {
 	if(!setDifficulty(difficulty)) {

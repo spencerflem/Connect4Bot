@@ -9,8 +9,8 @@ struct GameState {
 						{0,0,0,0,0,0,0},
 						{0,0,0,0,0,0,0},
 						{0,0,0,0,0,0,0},
-						{0,0,2,2,2,0,0},
-						{0,0,2,1,2,0,0} };
+						{0,0,0,0,0,0,0},
+						{0,0,0,0,0,0,0} };
 	GameState() {}
 	GameState(const GameState &otherState) {
 		for (int i = 0; i < 6; i++) {
