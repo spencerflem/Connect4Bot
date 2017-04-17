@@ -35,7 +35,15 @@ void Voice::requestMove(int column) {
 }
 
 void Voice::announceWinner(int player) {
-	text.announceWinner(player);
+	if (player == 1) {
+		std::cout << "Player 1 has won the game!" << std::endl;
+	}
+	else if (player == 2) {
+		std::cout << "Player 2 has won the game!" << std::endl;
+	}
+	else {
+		std::cout << "Stalemate!" << std::endl;
+	}
 	const char *filename;
 	if (player == 1)
 		filename = ("audio/redwins.wav");

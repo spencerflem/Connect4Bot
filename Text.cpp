@@ -21,10 +21,10 @@ void Text::requestMove(int column) {
 
 void Text::announceWinner(int player) {
 	if (player == 1) {
-		std::cout << "Red player has won the game!" << std::endl;
+		std::cout << "Player 1 has won the game!" << std::endl;
 	}
 	else if (player == 2) {
-		std::cout << "Yellow player has won the game!" << std::endl;
+		std::cout << "Player 2 has won the game!" << std::endl;
 	}
 	else {
 		std::cout << "Stalemate!" << std::endl;
