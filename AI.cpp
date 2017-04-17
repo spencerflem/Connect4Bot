@@ -75,19 +75,19 @@ int AI::dangerSpot(GameState rows) {
 						}
 					}
 					//Check to see if the 3 in a row lies on the board's right border and is empty
-					if(j!=COLUMN_COUNT_2-1 && rows.board[i][j+1]==0) {
+					if(j!=COLUMN_COUNT_2-1 && rows.board[i][j+3]==0) {
 						//Check to see if the right side of the 3 in a row is a playable spot.
 						if(i==ROW_COUNT_2-1) {
 							if(rows.board[i][j]==1) {
-								return (-1) * ((j+1)+1);
+								return (-1) * ((j+1)+3);
 							}
-							return (j+1)+1;
+							return (j+1)+3;
 						}
-						else if(rows.board[i+1][j+1] != 0) {
+						else if(rows.board[i+1][j+3] != 0) {
 							if(rows.board[i][j]==1) {
-								return (-1) * ((j+1)+1);
+								return (-1) * ((j+1)+3);
 							}
-							return (j+1)+1;
+							return (j+1)+3;
 						}
 					}
                 }
@@ -130,11 +130,11 @@ int AI::dangerSpot(GameState rows) {
 	                }
 				}
 				//Only check necessary positions for RDL condition
-				if(j>=(COLUMN_COUNT_2-5) && i<=(ROW_COUNT_2-3) && !(i==0 && j==2) && !(i==3 && j==ROW_COUNT_2-1)) {
-					//Check diagonal LDR for 3 in a diagonal condition
+				if(j>=(COLUMN_COUNT_2-5) && i<=(ROW_COUNT_2-3) && !(i==0 && j==2) && !(i==3 && j==COLUMN_COUNT_2-1)) {
+					//Check diagonal RDL for 3 in a diagonal condition
 	                if(rows.board[i][j]==rows.board[i+1][j-1] && rows.board[i][j]==rows.board[i+2][j-2]) {
 						//Check to see if right/up spot is dangerous
-						if((i!=0 && j!=ROW_COUNT_2-1) && rows.board[i-1][j+1]==0 && rows.board[i][j+1]!=0) {
+						if(i!=0 && j!=COLUMN_COUNT_2-1 && rows.board[i-1][j+1]==0 && rows.board[i][j+1]!=0) {
 							if(rows.board[i][j]==1) {
 								return (-1) * ((j+1)+1);
 							}
@@ -735,13 +735,13 @@ int AI::thomasAI(GameState rows) { // 0 is nothing, 1 is AI, 2 is player, red is
 	}
 	GameState miniMax(rows);
 	int depth=0;
-	while(miniMax.board[depth][randCol]==0) {
+	while(depth<ROW_COUNT_2 && miniMax.board[depth][randCol]==0) {
 		depth++;
 	}
 	miniMax.board[depth-1][randCol] = 1;
 	if(dangerSpot(miniMax)>0) {
 		loopDepth++;
-		thomasAI(rows);
+		return thomasAI(rows);
 	}
 	return randCol;
 }

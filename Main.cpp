@@ -6,6 +6,10 @@
 #include <stdlib.h>
 #include <time.h>
 
+//testing
+#include "GameState.h"
+#include <iostream>
+
 #ifdef VISION
 #include "Vision.h"
 const bool vision = true;
@@ -26,6 +30,7 @@ const bool voice = false;
 
 int main(int argc, char *argv[])
 {
+    /*
     srand ( time(NULL) );
     int finished = false;
     Move turn;
@@ -74,5 +79,13 @@ int main(int argc, char *argv[])
     }
     output.printBoard(game.getGameState());
 	output.announceWinner(finished);
+    */
+    //Test Time baby!!!!
+    GameState tester;
+    AI jimmy = AI(0);
+    for(int i=0 i<20; i++) {
+        int alpha = jimmy.thomasAI(tester);
+        std::cout << alpha << endl;
+    }
     return 0;
 }
