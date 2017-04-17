@@ -70,7 +70,9 @@ int main(int argc, char *argv [])
 		}
 		finished = game.isWin();
 	}
-	output.printBoard(game.getGameState());
+	if (finished > 1) {
+		output.printBoard(game.getGameState());
+	}
 	output.announceWinner(finished);
 
 	return 0;

@@ -20,7 +20,15 @@ void Text::requestMove(int column) {
 }
 
 void Text::announceWinner(int player) {
-	std::cout << ((player==1)? "Red" : "Yellow") << " player has won the game!" << std::endl;
+	if (player == 1) {
+		std::cout << "Red player has won the game!" << std::endl;
+	}
+	else if (player == 2) {
+		std::cout << "Yellow player has won the game!" << std::endl;
+	}
+	else {
+		std::cout << "Stalemate!" << std::endl;
+	}
 }
 
 void Text::visionError() {

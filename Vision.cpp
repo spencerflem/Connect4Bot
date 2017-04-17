@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 Vision::Vision() {
-	capture = cv::VideoCapture(-1);
+	capture = cv::VideoCapture(0);
 
 	if (!capture.isOpened()) {
 		output.visionError();
