@@ -36,5 +36,5 @@ void Text::visionError() {
 }
 
 void Text::promptMove(int player) {
-	std::cout << "Enter " << ((player == 1) ? "red" : "yellow") << " player's move column - ";
+	std::cout << std::endl << "Enter Player " << ((player == 1) ? "1" : "2") << "'s move column: ";
 }

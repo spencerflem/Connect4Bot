@@ -61,6 +61,6 @@ void Voice::visionError() {
 }
 
 void Voice::promptMove(int player) {
-	text.promptMove(player);
+	std::cout << std::endl << "Enter " << ((player == 1) ? "Red" : "Yellow") << " player's move column: ";
 	PlaySound(TEXT("audio/promptmove.wav"), NULL, SND_ALIAS | SND_APPLICATION | SND_ASYNC);
 }
