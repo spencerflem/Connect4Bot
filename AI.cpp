@@ -171,7 +171,7 @@ int AI::dangerSpot(GameState rows) {
     }
 	return dangerCol;
 }
-
+static int loopDepth=0;
 int AI::thomasAI(GameState rows) { // 0 is nothing, 1 is AI, 2 is player, red is AI, yellow is player
 
 	// The AI chooses a random column (1-7) if the player is not about to win. Or if the AI is not about to win.
@@ -182,7 +182,6 @@ int AI::thomasAI(GameState rows) { // 0 is nothing, 1 is AI, 2 is player, red is
 		randCol = rand() % 7;
 	} while (availableColumns[randCol] != 3);
 	delete availableColumns;
-
 
 	// ********************************
 	// OFFENSIVES ACTIONS  GO UNDER HERE
@@ -674,5 +673,12 @@ int AI::thomasAI(GameState rows) { // 0 is nothing, 1 is AI, 2 is player, red is
 		}
 	}
 
+	Gamestate miniMax();
+	miniMax.board=rows.board;
+	int depth=0;
+	while(miniMax.board[y][x]) {
+		;
+	}
+	miniMax.board[][randCow] = 1;
 	return randCol;
 }
