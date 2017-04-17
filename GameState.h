@@ -12,6 +12,13 @@ struct GameState {
 						{0,0,0,0,0,0,0},
 						{0,0,0,0,0,0,0} };
 	GameState() {}
+	GameState(const GameState &otherState) {
+		for (int i = 0; i < 6; i++) {
+			for (int j = 0; j < 7; j++) {
+				board[i][j] = otherState.board[i][j];
+			}
+		}
+	}
 	bool operator==(const GameState& other) {
 		for (int i=0; i < 6; i++) {
 			for (int j = 0; j < 7; j++) {

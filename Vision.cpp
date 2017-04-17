@@ -2,17 +2,16 @@
 
 #include <stdlib.h>
 
-Vision::Vision() {}
-
-Move Vision::getMove(GameState origState, int player) {
-	//cv::VideoCapture capture("C:\\Users\\me\\Pictures\\Camera Roll\\c4l.mp4"); //replace string with 0 to get webcam
-	cv::VideoCapture capture(0);
+Vision::Vision() {
+	capture = cv::VideoCapture(-1);
 
 	if (!capture.isOpened()) {
 		output.visionError();
 		throw "Capture Failed";
 	}
+}
 
+Move Vision::getMove(GameState origState, int player) {
 	//if different on first 3 frames, FAIL!!!
 	GameState backTwo = origState, backOne = origState;
 	int frameCount = 0;

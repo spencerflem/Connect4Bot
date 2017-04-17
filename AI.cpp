@@ -20,7 +20,6 @@ bool AI::setDifficulty(int difficulty) {
 }
 
 Move AI::makeMove(GameState gameState, int player) {
-	// double *availableColumns = getOptions(gameState);
 	bool firstMove = true;
 	for (int i = 0; i < COLUMN_COUNT_2; ++i) {
 		if (gameState.board[ROW_COUNT_2-1][i] != 0)
@@ -29,11 +28,12 @@ Move AI::makeMove(GameState gameState, int player) {
 	if (firstMove)
 		return Move(player, 3);
 	else {
-		int strategy = rand() % 2;
-		switch (strategy) {
-			case 0: return Move(player, dangerSpot(gameState));
-			case 1: return Move(player, decisiveAI(gameState));
-		}
+		// double *availableColumns = getOptions(gameState);
+		int col = dangerSpot(gameState);
+		if(col != -1)
+			return Move(player, col);
+		else
+			return Move(player, thomasAI(gameState));
 	}
 	return Move(player, rand()%7);
 }
@@ -123,32 +123,303 @@ int AI::dangerSpot(GameState rows) {
 						}
 	                }
 				}
+				//Check for danger spots in holes in rows
+				if(j<=(COLUMN_COUNT_2-4)) {
+					//Check for 2 in a row followed by open then occupied spot in format xx_x
+					if(rows.board[i][j]==rows.board[i][j+1] && rows.board[i][j+2]==0 && rows.board[i][j]==rows.board[i][j+3]) {
+						if(i==ROW_COUNT_2-1) {
+							return j+2;
+						}
+						else if(rows.board[i+1][j+2] !=0 ) {
+                    		return j+2;
+						}
+					}
+					//Check for 2 in a row followed by open then occupied spot in format x_xx
+					if(rows.board[i][j]==rows.board[i][j+2] && rows.board[i][j+1]==0 && rows.board[i][j]==rows.board[i][j+3]) {
+						if(i==ROW_COUNT_2-1) {
+							return j+1;
+						}
+						else if(rows.board[i+1][j+1] !=0 ) {
+                    		return j+1;
+						}
+					}
+                }
+				//Check for danger spots in holes in diagonals LDR
+				if(i<ROW_COUNT_2-3 && j<COLUMN_COUNT_2-3) {
+					//Check for xx_x holes
+					if(rows.board[i][j]==rows.board[i+1][j+1] && rows.board[i+2][j+2]==0 && rows.board[i][j]==rows.board[i+3][j+3] && rows.board[i+3][j+2]!=0) {
+						return j+2;
+					}
+					//Check for x_xx holes
+					if(rows.board[i][j]==rows.board[i+2][j+2] && rows.board[i+1][j+1]==0 && rows.board[i][j]==rows.board[i+3][j+3] && rows.board[i+2][j+1]!=0) {
+						return j+1;
+					}
+				}
+				//Check for danger spots in holes in diagonals RDL
+				if(i<ROW_COUNT_2-3 && j>COLUMN_COUNT_2-5) {
+					//Check for xx_x holes
+					if(rows.board[i][j]==rows.board[i+1][j-1] && rows.board[i+2][j-2]==0 && rows.board[i][j]==rows.board[i+3][j-3] && rows.board[i+3][j-2]!=0) {
+						return j-2;
+					}
+					//Check for x_xx holes
+					if(rows.board[i][j]==rows.board[i+2][j-2] && rows.board[i+1][j-1]==0 && rows.board[i][j]==rows.board[i+3][j-3] && rows.board[i+2][j-1]!=0) {
+						return j-1;
+					}
+				}
 			}
         }
     }
 	return dangerCol;
 }
+static int loopDepth=0;
+int AI::thomasAI(GameState rows) { // 0 is nothing, 1 is AI, 2 is player, red is AI, yellow is player
 
-// TODO: It doesnt check diagonals, but that will be trivial to implement.
-int AI::decisiveAI(GameState rows) { // 0 is nothing, 1 is AI, 2 is player, red is AI, yellow is player
-	int randCol = rand() % 8;   // The AI chooses a random column (0-7) if the player is not about to win. Or if the AI is not about to win.
+	// The AI chooses a random column (1-7) if the player is not about to win. Or if the AI is not about to win.
 
+	double *availableColumns = getOptions(rows);
+	int randCol;
+	do {
+		randCol = rand() % 7;
+	} while (availableColumns[randCol] != 3);
+	delete availableColumns;
 
-	// This will make the AI choose a column which is about to be taken by the player (IE, the player has three pieces in a vertical column already)
-	for (int row = 6; row >= 3; row--)
+	// ********************************
+	// OFFENSIVES ACTIONS  GO UNDER HERE
+	//
+
+	// OFFENSIVE DIAGONAL MOVES GO UNDER HERE *************
+
+	// CASE 19: This diagonal will have the AI make offensive diagonal moves, backslash, the rightmost piece :: DONE
+
+	for (int row = 5; row >= 3; row--)
 	{
-		for (int col = 0; col <= 7; col++)
+		for (int col = 6; col >= 3; col--)
 		{
-			if (rows.board[row][col] == 2 && rows.board[row - 1][col] == 2 && rows.board[row - 2][col] == 2 && rows.board[row - 3][col] == 0)
+			if (rows.board[row][col] == 0 && rows.board[row - 1][col - 1] == 1 && rows.board[row - 2][col - 2] == 1 && rows.board[row - 3][col - 3] == 1)
 			{
-				return col;
+				if (row != 5 && rows.board[row + 1][col] != 0)
+				{
+					return col;
+				}
+				else if (row == 5)
+				{
+					return col;
+				}
+
+			}
+
+		}
+	}
+
+	// Hard Coding Diagonal Case 20
+	// This diagonal will have the AI make offensive diagonal moves, backslash, the x.x._.x piece :: DONE
+	for (int row = 5; row >= 3; row--)
+	{
+		for (int col = 6; col >= 3; col--)
+		{
+			if (rows.board[row][col] == 1 && rows.board[row - 1][col - 1] == 0 && rows.board[row - 2][col - 2] == 1 && rows.board[row - 3][col - 3] == 1)
+			{
+				if (rows.board[row][col - 1] != 0)
+				{
+					return col;
+				}
+			}
+
+		}
+	}
+
+	// Hard Coding Diagonal Case 21
+	// This diagonal will have the AI make offense diagonal moves, backslash, the x._.x.x piece :: DONE
+	for (int row = 5; row >= 3; row--)
+	{
+		for (int col = 6; col >= 3; col--)
+		{
+			if (rows.board[row][col] == 1 && rows.board[row - 1][col - 1] == 1 && rows.board[row - 2][col - 2] == 0 && rows.board[row - 3][col - 3] == 1)
+			{
+				if (rows.board[row - 1][col - 2] != 0)
+				{
+					return col;
+				}
+			}
+
+		}
+	}
+
+	// Hard Coding Diagonal Case 22
+	// This diagonal will have the ai make offensive diagonal moves, backslash, the _.x.x.x piece :: DONE
+	for (int row = 5; row >= 3; row--)
+	{
+		for (int col = 6; col >= 3; col--)
+		{
+			if (rows.board[row][col] == 1 && rows.board[row - 1][col - 1] == 1 && rows.board[row - 2][col - 2] == 1 && rows.board[row - 3][col - 3] == 0)
+			{
+				if (rows.board[row - 2][col - 3] != 0)
+				{
+					return col;
+				}
+			}
+
+		}
+	}
+
+	// Hard Coding Diagonal Case 23
+	// This diagonal will have the ai make offensive diagonal moves, forwardslash, the x.x.x._ piece :: DONE
+	for (int row = 5; row >= 3; row--)
+	{
+		for (int col = 3; col >= 0; col--)
+		{
+			if (rows.board[row][col] == 1 && rows.board[row - 1][col + 1] == 1 && rows.board[row - 2][col + 2] == 1 && rows.board[row - 3][col + 3] == 0)
+			{
+				if (rows.board[row - 2][col + 3] != 0)
+				{
+					return col;
+				}
+			}
+
+		}
+	}
+
+	// Hard Coding Diagonal Case 24
+	// This diagonal will have the ai make offensive diagonal moves, forwardslash, the x.x._.x piece :: DONE
+	for (int row = 5; row >= 3; row--)
+	{
+		for (int col = 3; col >= 0; col--)
+		{
+			if (rows.board[row][col] == 1 && rows.board[row - 1][col + 1] == 1 && rows.board[row - 2][col + 2] == 0 && rows.board[row - 3][col + 3] == 1)
+			{
+				if (rows.board[row - 1][col + 2] != 0)
+				{
+					return col;
+				}
+			}
+
+		}
+	}
+
+	// Hard Coding Diagonal Case 25
+	// This diagonal will have the ai  make defensive diagonal moves, forwardslash, the x._.x.x piece :: DONE
+	for (int row = 5; row >= 3; row--)
+	{
+		for (int col = 3; col >= 0; col--)
+		{
+			if (rows.board[row][col] == 1 && rows.board[row - 1][col + 1] == 0 && rows.board[row - 2][col + 2] == 1 && rows.board[row - 3][col + 3] == 1)
+			{
+				if (rows.board[row][col + 1] != 0)
+				{
+					return col;
+				}
+			}
+
+		}
+	}
+
+	// Hard Coding Diagonal Case 26
+	// This diagonal will have the ai make offensive diagonal moves, forwardslash, the x._.x.x piece :: DONE
+	for (int row = 5; row >= 3; row--)
+	{
+		for (int col = 3; col >= 0; col--)
+		{
+			if (rows.board[row][col] == 0 && rows.board[row - 1][col + 1] == 1 && rows.board[row - 2][col + 2] == 1 && rows.board[row - 3][col + 3] == 1)
+			{
+				if (row != 5 && rows.board[row + 1][col] != 0)
+				{
+					return col;
+				}
+				else if (row == 5)
+				{
+					return col;
+				}
+			}
+
+		}
+	}
+
+	// CASE 1: AI winning horizontally, right to left _.x.x.x ::DONE
+	for (int col = 6; col >= 3; col--)
+	{
+		for (int row = 5; row >= 0; row--)
+		{
+			if (rows.board[row][col] == 1 && rows.board[row][col - 1] == 1 && rows.board[row][col - 2] == 1 && rows.board[row][col - 3] == 0)
+			{
+				if (row != 5 && rows.board[row + 1][col - 3] != 0)
+				{
+					return (col - 3);
+				}
+				else if (row == 5)
+				{
+					return (col - 3);
+				}
+
 			}
 		}
 	}
-	// This will make the AI choose a column it is about to win vertically. (IE the AI has three pieces in a vertical column already)
-	for (int row = 6; row >= 3; row--)
+
+	// CASE 2: AI Wins Within Horizontally  right to left   x._.x.x ::DONE
+	for (int col = 6; col >= 3; col--)
 	{
-		for (int col = 0; col <= 7; col++)
+		for (int row = 5; row >= 0; row--)
+		{
+			if (rows.board[row][col] == 1 && rows.board[row][col - 1] == 1 && rows.board[row][col - 2] == 0 && rows.board[row][col - 3] == 1)
+			{
+				if (row != 5 && rows.board[row + 1][col - 2] != 0)
+				{
+					return (col - 2);
+				}
+				else if (row == 5)
+				{
+					return (col - 2);
+				}
+
+			}
+		}
+	}
+
+	// CASE 3: AI winning horizontally within , right to left x.x._.x :: DONE
+	for (int col = 6; col >= 3; col--)
+	{
+		for (int row = 5; row >= 0; row--)
+		{
+			if (rows.board[row][col] == 1 && rows.board[row][col - 1] == 0 && rows.board[row][col - 2] == 1 && rows.board[row][col - 3] == 1)
+			{
+				if (row != 5 && rows.board[row + 1][col - 1] != 0)
+				{
+					return (col - 1);
+				}
+				else if (row == 5)
+				{
+					return (col - 1);
+				}
+
+			}
+		}
+	}
+
+	// CASE 4: AI winning horizontally within , right to left x.x.x._  :: DONE
+	for (int col = 6; col >= 3; col--)
+	{
+		for (int row = 5; row >= 0; row--)
+		{
+			if (rows.board[row][col] == 0 && rows.board[row][col - 1] == 1 && rows.board[row][col - 2] == 1 && rows.board[row][col - 3] == 1)
+			{
+				if (row != 5 && rows.board[row + 1][col] != 0)
+				{
+					return (col);
+				}
+				else if (row == 5)
+				{
+					return (col);
+				}
+
+			}
+		}
+	}
+
+
+
+	// CASE 5: AI Win Vertically
+	for (int row = 5; row >= 3; row--)
+	{
+		for (int col = 0; col <= 6; col++)
 		{
 			if (rows.board[row][col] == 1 && rows.board[row - 1][col] == 1 && rows.board[row - 2][col] == 1 && rows.board[row - 3][col] == 0)
 			{
@@ -157,30 +428,257 @@ int AI::decisiveAI(GameState rows) { // 0 is nothing, 1 is AI, 2 is player, red 
 		}
 	}
 
-	// This will make the AI choose a column which the player is about to win horizontally. (IE the player has three pieces in a horizontal row already)
-	for (int col = 7; col >= 3; col--)
+
+	// ********************************
+	// DEFENSIVE ACTIONS GO UNDER HERE
+	//
+
+
+	// CASE 6: AI Protect Vertically
+	for (int row = 5; row >= 3; row--)
 	{
-		for (int row = 6; row >= 0; row--)
+		for (int col = 0; col <= 6; col++)
+		{
+			if (rows.board[row][col] == 2 && rows.board[row - 1][col] == 2 && rows.board[row - 2][col] == 2 && rows.board[row - 3][col] == 0)
+			{
+				return col;
+			}
+		}
+	}
+
+
+	// CASE 7: AI winning horizontally, right to left _.x.x.x ::
+	for (int col = 6; col >= 3; col--)
+	{
+		for (int row = 5; row >= 0; row--)
 		{
 			if (rows.board[row][col] == 2 && rows.board[row][col - 1] == 2 && rows.board[row][col - 2] == 2 && rows.board[row][col - 3] == 0)
 			{
-				return (col - 3);
+				if (row != 5 && rows.board[row + 1][col - 3] != 0)
+				{
+					return (col - 3);
+				}
+				else if (row == 5)
+				{
+					return (col - 3);
+				}
+
 			}
 		}
 	}
 
-	// This will make the AI choose a column which the AI is about to win horizontally. (IE the AI has three pieces in a horizontal row already)
-	for (int col = 7; col >= 3; col--)
+	// CASE 8: AI Wins Within Horizontally  right to left   x._.x.x ::
+	for (int col = 6; col >= 3; col--)
 	{
-		for (int row = 6; row >= 0; row--)
+		for (int row = 5; row >= 0; row--)
 		{
-			if (rows.board[row][col] == 1 && rows.board[row][col - 1] == 1 && rows.board[row][col - 2] == 1 && rows.board[row][col - 3] == 0)
+			if (rows.board[row][col] == 2 && rows.board[row][col - 1] == 2 && rows.board[row][col - 2] == 0 && rows.board[row][col - 3] == 2)
 			{
-				return (col - 3);
+				if (row != 5 && rows.board[row + 1][col - 2] != 0)
+				{
+					return (col - 2);
+				}
+				else if (row == 5)
+				{
+					return (col - 2);
+				}
+
 			}
 		}
 	}
 
-	return randCol;
+	// CASE 9: AI winning horizontally within , right to left x.x._.x ::
+	for (int col = 6; col >= 3; col--)
+	{
+		for (int row = 5; row >= 0; row--)
+		{
+			if (rows.board[row][col] == 2 && rows.board[row][col - 1] == 0 && rows.board[row][col - 2] == 2 && rows.board[row][col - 3] == 2)
+			{
+				if (row != 5 && rows.board[row + 1][col - 1] != 0)
+				{
+					return (col - 1);
+				}
+				else if (row == 5)
+				{
+					return (col - 1);
+				}
 
+			}
+		}
+	}
+
+	// CASE 10: AI protects horizontally within , right to left x.x.x._  ::
+	for (int col = 6; col >= 3; col--)
+	{
+		for (int row = 5; row >= 0; row--)
+		{
+			if (rows.board[row][col] == 0 && rows.board[row][col - 1] == 2 && rows.board[row][col - 2] == 2 && rows.board[row][col - 3] == 2)
+			{
+				if (row != 5 && rows.board[row + 1][col] != 0)
+				{
+					return (col);
+				}
+				else if (row == 5)
+				{
+					return (col);
+				}
+
+			}
+		}
+	}
+	// 0 is nothing ||| 1 is AI |||  2 is player
+	// Hard Coding Diagonal Case 11
+	// This diagonal will have the player make defensive diagonal moves, backslash, the rightmost piece :: DONE
+
+	for (int row = 5; row >= 3; row--)
+	{
+		for (int col = 6; col >= 3; col--)
+		{
+			if (rows.board[row][col] == 0 && rows.board[row - 1][col - 1] == 2 && rows.board[row - 2][col - 2] == 2 && rows.board[row - 3][col - 3] == 2)
+			{
+				if (row != 5 && rows.board[row + 1][col] != 0)
+				{
+					return col;
+				}
+				else if (row == 5)
+				{
+					return col;
+				}
+
+			}
+
+		}
+	}
+
+	// Hard Coding Diagonal Case 12
+	// This diagonal will have the player make defensive diagonal moves, backslash, the x.x._.x piece :: DONE
+	for (int row = 5; row >= 3; row--)
+	{
+		for (int col = 6; col >= 3; col--)
+		{
+			if (rows.board[row][col] == 2 && rows.board[row - 1][col - 1] == 0 && rows.board[row - 2][col - 2] == 2 && rows.board[row - 3][col - 3] == 2)
+			{
+				if (rows.board[row][col - 1] != 0)
+				{
+					return col;
+				}
+			}
+
+		}
+	}
+
+	// Hard Coding Diagonal Case 13
+	// This diagonal will have the player make defensive diagonal moves, backslash, the x._.x.x piece :: DONE
+	for (int row = 5; row >= 3; row--)
+	{
+		for (int col = 6; col >= 3; col--)
+		{
+			if (rows.board[row][col] == 2 && rows.board[row - 1][col - 1] == 2 && rows.board[row - 2][col - 2] == 0 && rows.board[row - 3][col - 3] == 2)
+			{
+				if (rows.board[row - 1][col - 2] != 0)
+				{
+					return col;
+				}
+			}
+
+		}
+	}
+
+	// Hard Coding Diagonal Case 14
+	// This diagonal will have the player make defensive diagonal moves, backslash, the _.x.x.x piece :: DONE
+	for (int row = 5; row >= 3; row--)
+	{
+		for (int col = 6; col >= 3; col--)
+		{
+			if (rows.board[row][col] == 2 && rows.board[row - 1][col - 1] == 2 && rows.board[row - 2][col - 2] == 2 && rows.board[row - 3][col - 3] == 0)
+			{
+				if (rows.board[row - 2][col - 3] != 0)
+				{
+					return col;
+				}
+			}
+
+		}
+	}
+
+	// Hard Coding Diagonal Case 15
+	// This diagonal will have the player make defensive diagonal moves, forwardslash, the x.x.x._ piece :: DONE
+	for (int row = 5; row >= 3; row--)
+	{
+		for (int col = 3; col >= 0; col--)
+		{
+			if (rows.board[row][col] == 2 && rows.board[row - 1][col + 1] == 2 && rows.board[row - 2][col + 2] == 2 && rows.board[row - 3][col + 3] == 0)
+			{
+				if (rows.board[row - 2][col + 3] != 0)
+				{
+					return col;
+				}
+			}
+
+		}
+	}
+
+	// Hard Coding Diagonal Case 16
+	// This diagonal will have the player make defensive diagonal moves, forwardslash, the x.x._.x piece :: DONE
+	for (int row = 5; row >= 3; row--)
+	{
+		for (int col = 3; col >= 0; col--)
+		{
+			if (rows.board[row][col] == 2 && rows.board[row - 1][col + 1] == 2 && rows.board[row - 2][col + 2] == 0 && rows.board[row - 3][col + 3] == 2)
+			{
+				if (rows.board[row - 1][col + 2] != 0)
+				{
+					return col;
+				}
+			}
+
+		}
+	}
+
+	// Hard Coding Diagonal Case 17
+	// This diagonal will have the player make defensive diagonal moves, forwardslash, the x._.x.x piece :: DONE
+	for (int row = 5; row >= 3; row--)
+	{
+		for (int col = 3; col >= 0; col--)
+		{
+			if (rows.board[row][col] == 2 && rows.board[row - 1][col + 1] == 0 && rows.board[row - 2][col + 2] == 2 && rows.board[row - 3][col + 3] == 2)
+			{
+				if (rows.board[row][col + 1] != 0)
+				{
+					return col;
+				}
+			}
+
+		}
+	}
+
+	// Hard Coding Diagonal Case 18
+	// This diagonal will have the player make defensive diagonal moves, forwardslash, the x._.x.x piece :: DONE
+	for (int row = 5; row >= 3; row--)
+	{
+		for (int col = 3; col >= 0; col--)
+		{
+			if (rows.board[row][col] == 0 && rows.board[row - 1][col + 1] == 2 && rows.board[row - 2][col + 2] == 2 && rows.board[row - 3][col + 3] == 2)
+			{
+				if (row != 5 && rows.board[row + 1][col] != 0)
+				{
+					return col;
+				}
+				else if (row == 5)
+				{
+					return col;
+				}
+			}
+
+		}
+	}
+
+	Gamestate miniMax();
+	miniMax.board=rows.board;
+	int depth=0;
+	while(miniMax.board[y][x]) {
+		;
+	}
+	miniMax.board[][randCow] = 1;
+	return randCol;
 }

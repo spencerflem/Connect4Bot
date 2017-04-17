@@ -14,7 +14,11 @@ private:
 <<<<<<< HEAD
 =======
 	int dangerSpot(GameState rows);
+<<<<<<< HEAD
 	int decisiveAI(GameState rows);
+>>>>>>> refs/remotes/origin/master
+=======
+	int thomasAI(GameState rows);
 >>>>>>> refs/remotes/origin/master
 public:
 	AI(int difficulty);
